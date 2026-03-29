@@ -207,12 +207,52 @@
                         </div>
                     </div>
 
-                    <!-- Fratrie Simplifiée -->
-                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5">
-                        <p class="text-[10px] font-bold text-blue-500 uppercase mb-4 tracking-widest">Fratrie Germaine</p>
-                        <div class="grid grid-cols-2 gap-4">
-                            <input type="number" id="count_f_g" placeholder="Nb Frères" class="input-premium w-full p-3 rounded-xl text-sm text-center">
-                            <input type="number" id="count_s_g" placeholder="Nb Sœurs" class="input-premium w-full p-3 rounded-xl text-sm text-center">
+                    <!-- Fratrie étendue -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5 space-y-4">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Fratrie</p>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <!-- Germains -->
+                            <div>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Germains (أشقاء)</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] text-slate-400">Frères</span>
+                                        <input type="number" id="count_f_g" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] text-slate-400">Sœurs</span>
+                                        <input type="number" id="count_s_g" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Consanguins -->
+                            <div>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Consanguins (لأب)</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] text-slate-400">Frères</span>
+                                        <input type="number" id="count_f_c" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] text-slate-400">Sœurs</span>
+                                        <input type="number" id="count_s_c" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Utérins -->
+                            <div>
+                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Utérins (لأم)</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] text-slate-400">Frères</span>
+                                        <input type="number" id="count_f_u" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
+                                    </div>
+                                    <div class="space-y-1">
+                                        <span class="text-[10px] text-slate-400">Sœurs</span>
+                                        <input type="number" id="count_s_u" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </section>
@@ -229,6 +269,10 @@
                         <i class="fa-solid fa-chart-pie text-emerald-500"></i> Bilan Net
                     </h2>
                     <div id="results-list" class="space-y-4 mb-8"></div>
+                    <!-- Badge règle appliquée -->
+                    <div id="rule-badge" class="mb-4 hidden">
+                        <span id="rule-badge-text" class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest"></span>
+                    </div>
                     <div class="bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20">
                         <p class="text-[10px] text-slate-500 font-black uppercase mb-1">Total Distribué</p>
                         <div id="res-total-money" class="text-3xl font-black text-emerald-600 dark:text-white">0,00 €</div>
@@ -244,7 +288,7 @@
     </div>
 
     <script>
-        // Gestion du Thème
+        // ─── Thème ───────────────────────────────────────────────────────────────
         function toggleTheme() {
             const html = document.documentElement;
             const icon = document.getElementById('theme-icon');
@@ -260,13 +304,12 @@
         let gender = 'male';
 
         function updateNetTotal() {
-            const assets = parseFloat(document.getElementById('total_assets').value) || 0;
-            const debts = parseFloat(document.getElementById('total_debts').value) || 0;
+            const assets   = parseFloat(document.getElementById('total_assets').value)   || 0;
+            const debts    = parseFloat(document.getElementById('total_debts').value)    || 0;
             const wasiyyah = parseFloat(document.getElementById('total_wasiyyah').value) || 0;
-            
-            const afterDebts = assets - debts;
-            const netTotal = Math.max(0, afterDebts - wasiyyah);
-            document.getElementById('display_net_total').innerText = netTotal.toLocaleString('fr-FR', {style: 'currency', currency: 'EUR'});
+            const netTotal = Math.max(0, assets - debts - wasiyyah);
+            document.getElementById('display_net_total').innerText =
+                netTotal.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
             return netTotal;
         }
 
@@ -275,7 +318,6 @@
             const bm = document.getElementById('btn-male');
             const bf = document.getElementById('btn-female');
             const sl = document.getElementById('label-spouse');
-            
             [bm, bf].forEach(b => b.style.borderColor = "transparent");
             if (g === 'male') {
                 bm.style.borderColor = "#3b82f6";
@@ -287,92 +329,212 @@
         }
         setDeceasedGender('male');
 
+        // ─── Moteur de calcul islamique ──────────────────────────────────────────
         function calculate() {
             const total = updateNetTotal();
-            if (total <= 0) return alert("Veuillez saisir un actif net.");
+            if (total <= 0) { alert("Veuillez saisir un actif net positif."); return; }
 
-            const sps = parseInt(document.getElementById('count_spouses').value) || 0;
-            const sons = parseInt(document.getElementById('count_sons').value) || 0;
-            const dau = parseInt(document.getElementById('count_daughters').value) || 0;
-            const fth = document.getElementById('father_alive').checked;
-            const mth = document.getElementById('mother_alive').checked;
+            const sps  = parseInt(document.getElementById('count_spouses').value)  || 0;
+            const sons = parseInt(document.getElementById('count_sons').value)     || 0;
+            const dau  = parseInt(document.getElementById('count_daughters').value)|| 0;
+            const fth  = document.getElementById('father_alive').checked;
+            const mth  = document.getElementById('mother_alive').checked;
+
+            // Fratrie : germains, consanguins, utérins
             const f_g = parseInt(document.getElementById('count_f_g').value) || 0;
             const s_g = parseInt(document.getElementById('count_s_g').value) || 0;
-
-            let shares = [];
-            let r = 1.0; 
+            const f_c = parseInt(document.getElementById('count_f_c').value) || 0;
+            const s_c = parseInt(document.getElementById('count_s_c').value) || 0;
+            const f_u = parseInt(document.getElementById('count_f_u').value) || 0;
+            const s_u = parseInt(document.getElementById('count_s_u').value) || 0;
 
             const hasDescendant = (sons > 0 || dau > 0);
-            const hasBrothers = (f_g + s_g >= 2);
+
+            // Nombre total de frères/sœurs (tous types) pour réduction part mère
+            const totalSiblings = f_g + s_g + f_c + s_c + f_u + s_u;
+
+            // Frères/sœurs germains ou consanguins bloquent les utérins et la fratrie inférieure
+            const hasAsabaSiblings = (f_g + s_g) > 0;   // germains présents
+            const hasConsangSiblings = (f_c + s_c) > 0; // consanguins présents (actifs ssi pas germains)
+
+            // ── Parts fixes (furuḍ) ──────────────────────────────────────────────
+            // On travaille en fractions rationnelles pour éviter les erreurs float
+            // Représentation : { num, den } → num/den
+            // Mais pour simplicité on accumule en float puis on normalise via ʿawl/radd
+
+            let shares = []; // { name, frac (float 0..1), count, isAsaba, isRadd }
 
             // 1. Conjoint
             if (sps > 0) {
-                let s = (gender === 'male') ? (hasDescendant ? 1/8 : 1/4) : (hasDescendant ? 1/4 : 1/2);
-                shares.push({name: gender==='male'?"Épouse(s)":"Époux", part: s, count: sps});
-                r -= s;
+                let s;
+                if (gender === 'male') {
+                    s = hasDescendant ? 1/8 : 1/4;
+                } else {
+                    s = hasDescendant ? 1/4 : 1/2;
+                }
+                shares.push({ name: gender === 'male' ? "Épouse(s)" : "Époux", frac: s, count: sps });
             }
 
-            // 2. Parents
+            // 2. Mère
+            // Part réduite à 1/6 si : descendant présent OU ≥ 2 frères/sœurs (tous types)
             if (mth) {
-                let s = (hasDescendant || hasBrothers) ? 1/6 : 1/3;
-                shares.push({name: "Mère", part: s, count: 1});
-                r -= s;
+                let s = (hasDescendant || totalSiblings >= 2) ? 1/6 : 1/3;
+                shares.push({ name: "Mère", frac: s, count: 1 });
             }
+
+            // 3. Père
+            // - En présence de descendants : 1/6 fixe (+ résidu ʿaṣaba si filles seulement, géré plus bas)
+            // - Sans descendants : ʿaṣaba pur (résidu), géré plus bas
             if (fth) {
                 if (hasDescendant) {
-                    shares.push({name: "Père (Fixe)", part: 1/6, count: 1});
-                    r -= 1/6;
+                    shares.push({ name: "Père", frac: 1/6, count: 1, fatherFixed: true });
                 }
+                // sans descendant : le père sera ajouté comme ʿaṣaba dans la section résidu
             }
 
-            // 3. Filles seules
+            // 4. Filles seules (sans fils) — part fixe
             if (sons === 0 && dau > 0) {
-                let s = (dau === 1) ? 1/2 : 2/3;
-                shares.push({name: "Fille(s)", part: s, count: dau});
-                r -= s;
+                const s = (dau === 1) ? 1/2 : 2/3;
+                shares.push({ name: "Fille(s)", frac: s, count: dau });
             }
 
-            // 4. Asaba (Reste)
-            let residue = Math.max(0, r);
+            // 5. Frères/sœurs utérins — part fixe (bloqués par descendants ou père)
+            // Bloqués par : tout descendant, père, grand-père
+            if (!hasDescendant && !fth && (f_u + s_u) > 0) {
+                const totalU = f_u + s_u;
+                const s = totalU === 1 ? 1/6 : 1/3;
+                // Part partagée également entre tous (homme = femme pour utérins)
+                shares.push({ name: "Frère(s)/Sœur(s) utérin(e)s", frac: s, count: totalU });
+            }
+
+            // ── Calcul du résidu (ʿaṣaba) ────────────────────────────────────────
+            const fixedSum = shares.reduce((acc, s) => acc + s.frac, 0);
+            let residue = Math.max(0, 1 - fixedSum);
+
             if (residue > 0) {
                 if (sons > 0) {
-                    const totalP = (sons * 2) + dau;
-                    shares.push({name: "Fils", part: (residue/totalP)*2*sons, count: sons, isAsaba: true});
-                    if (dau > 0) shares.push({name: "Fille(s)", part: (residue/totalP)*dau, count: dau, isAsaba: true});
+                    // Fils (+ filles en ʿaṣaba bil-ghair : ratio 2:1)
+                    const totalParts = sons * 2 + dau;
+                    shares.push({ name: "Fils", frac: residue * (sons * 2) / totalParts, count: sons, isAsaba: true });
+                    if (dau > 0) {
+                        shares.push({ name: "Fille(s)", frac: residue * dau / totalParts, count: dau, isAsaba: true });
+                    }
                 } else if (fth) {
-                    shares.push({name: "Père (Résidu)", part: residue, count: 1, isAsaba: true});
-                } else if (f_g > 0) {
-                    const totalP = (f_g * 2) + s_g;
-                    shares.push({name: "Frère(s) Germ.", part: (residue/totalP)*2*f_g, count: f_g, isAsaba: true});
-                    if (s_g > 0) shares.push({name: "Sœur(s) Germ.", part: (residue/totalP)*s_g, count: s_g, isAsaba: true});
+                    // Père : reçoit le résidu (couvre aussi le cas filles seules + père)
+                    shares.push({ name: "Père", frac: residue, count: 1, isAsaba: true });
+                } else if (hasAsabaSiblings) {
+                    // Frères/sœurs germains (bloquent les consanguins)
+                    if (s_g > 0 && f_g === 0) {
+                        // Sœurs germaines seules : ʿaṣaba maʿ al-ghair si filles présentes, sinon part fixe déjà comptée
+                        // Ici residue > 0 sans fils ni père ni filles → sœurs germaines = ʿaṣaba
+                        shares.push({ name: "Sœur(s) germaine(s)", frac: residue, count: s_g, isAsaba: true });
+                    } else {
+                        // Frères germains (± sœurs) : ratio 2:1
+                        const totalP = f_g * 2 + s_g;
+                        shares.push({ name: "Frère(s) germain(s)", frac: residue * (f_g * 2) / totalP, count: f_g, isAsaba: true });
+                        if (s_g > 0) {
+                            shares.push({ name: "Sœur(s) germaine(s)", frac: residue * s_g / totalP, count: s_g, isAsaba: true });
+                        }
+                    }
+                } else if (hasConsangSiblings) {
+                    // Frères/sœurs consanguins (même règle, activés seulement si pas de germains)
+                    if (s_c > 0 && f_c === 0) {
+                        shares.push({ name: "Sœur(s) consanguine(s)", frac: residue, count: s_c, isAsaba: true });
+                    } else {
+                        const totalP = f_c * 2 + s_c;
+                        shares.push({ name: "Frère(s) consanguin(s)", frac: residue * (f_c * 2) / totalP, count: f_c, isAsaba: true });
+                        if (s_c > 0) {
+                            shares.push({ name: "Sœur(s) consanguine(s)", frac: residue * s_c / totalP, count: s_c, isAsaba: true });
+                        }
+                    }
+                }
+                // Si aucun ʿaṣaba trouvé → résidu reste non distribué (traité en radd ci-dessous)
+            }
+
+            // ── Règle de l'ʿAwl (réduction proportionnelle si somme > 1) ─────────
+            // Ne concerne que les parts fixes (non-ʿaṣaba)
+            const fixedShares = shares.filter(s => !s.isAsaba);
+            const asabaShares = shares.filter(s => s.isAsaba);
+            const fixedTotal  = fixedShares.reduce((acc, s) => acc + s.frac, 0);
+            let appliedRule = null;
+
+            if (fixedTotal > 1 + 1e-9) {
+                // ʿAwl : toutes les parts fixes sont réduites proportionnellement
+                const factor = 1 / fixedTotal;
+                fixedShares.forEach(s => s.frac *= factor);
+                appliedRule = 'awl';
+            }
+
+            // ── Règle du Radd (retour aux héritiers à parts fixes si résidu non distribué) ─
+            // Applicable ssi : pas d'ʿaṣaba ET résidu > 0 ET au moins un héritier bénéficiaire du radd
+            // Les conjoints ne bénéficient pas du radd selon la Lajnah Dâ-imah
+            const asabaTotal = asabaShares.reduce((acc, s) => acc + s.frac, 0);
+            const allTotal   = fixedShares.reduce((acc, s) => acc + s.frac, 0) + asabaTotal;
+            const remainder  = Math.max(0, 1 - allTotal);
+
+            if (remainder > 1e-9 && asabaShares.length === 0) {
+                // Héritiers éligibles au radd (tous sauf conjoint)
+                const raddEligible = fixedShares.filter(s =>
+                    s.name !== "Épouse(s)" && s.name !== "Époux"
+                );
+                const raddBase = raddEligible.reduce((acc, s) => acc + s.frac, 0);
+                if (raddBase > 1e-9) {
+                    raddEligible.forEach(s => {
+                        s.frac += remainder * (s.frac / raddBase);
+                        s.isRadd = true;
+                    });
+                    appliedRule = 'radd';
                 }
             }
 
-            render(shares, total);
+            render(shares.filter(s => s.frac > 1e-9), total, appliedRule);
         }
 
-        function render(shares, total) {
+        // ─── Rendu ───────────────────────────────────────────────────────────────
+        function render(shares, total, appliedRule) {
             document.getElementById('placeholder-results').classList.add('hidden');
             const card = document.getElementById('results-card');
             const list = document.getElementById('results-list');
             card.classList.remove('hidden');
             list.innerHTML = "";
 
-            shares.filter(s => s.part > 0).forEach(s => {
+            shares.forEach(s => {
+                const perPerson = s.frac * total / s.count;
+                const badge = s.isAsaba
+                    ? '<span class="text-[9px] text-amber-500 font-black uppercase ml-1">ʿaṣaba ⭐</span>'
+                    : s.isRadd
+                        ? '<span class="text-[9px] text-blue-400 font-black uppercase ml-1">radd ↩</span>'
+                        : '';
                 const item = document.createElement('div');
                 item.className = "p-4 rounded-2xl bg-slate-500/5 border border-black/5 dark:border-white/5 flex justify-between items-center";
                 item.innerHTML = `
                     <div>
-                        <p class="font-bold text-sm">${s.name} ${s.isAsaba ? '⭐' : ''}</p>
-                        <p class="text-[10px] opacity-50 uppercase font-black">${(s.part*100).toFixed(1)}%</p>
+                        <p class="font-bold text-sm">${s.name}${badge}</p>
+                        <p class="text-[10px] opacity-50 uppercase font-black">${(s.frac * 100).toFixed(2)}%</p>
                     </div>
                     <div class="text-right">
-                        <p class="font-black text-emerald-600 dark:text-emerald-400">${(s.part * total).toLocaleString('fr-FR')} €</p>
-                        <p class="text-[9px] opacity-50">${s.count > 1 ? (s.part*total/s.count).toLocaleString('fr-FR')+'€ / pers.' : 'Part unique'}</p>
+                        <p class="font-black text-emerald-600 dark:text-emerald-400">${(s.frac * total).toLocaleString('fr-FR')} €</p>
+                        <p class="text-[9px] opacity-50">${s.count > 1 ? perPerson.toLocaleString('fr-FR') + ' € / pers.' : 'Part unique'}</p>
                     </div>
                 `;
                 list.appendChild(item);
             });
+
+            // Badge règle appliquée
+            const badge = document.getElementById('rule-badge');
+            const badgeText = document.getElementById('rule-badge-text');
+            if (appliedRule === 'awl') {
+                badge.classList.remove('hidden');
+                badgeText.className = "px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-orange-500/10 text-orange-400 border border-orange-400/30";
+                badgeText.innerText = "⚖️ Règle de l'ʿAwl appliquée — réduction proportionnelle";
+            } else if (appliedRule === 'radd') {
+                badge.classList.remove('hidden');
+                badgeText.className = "px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-400/30";
+                badgeText.innerText = "↩ Règle du Radd appliquée — retour aux héritiers";
+            } else {
+                badge.classList.add('hidden');
+            }
+
             document.getElementById('res-total-money').innerText = total.toLocaleString('fr-FR') + " €";
         }
     </script>
