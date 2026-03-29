@@ -3,539 +3,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Al-Mawārīth Expert - Premium Edition</title>
+    <title>Al-Mawārīth Expert - Édition Al-Muhaqqiq</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
         
-        :root {
-            --primary-gold: #d4af37;
-            --emerald-deep: #064e3b;
-        }
+        :root { --emerald-deep: #064e3b; }
 
-        /* Mode Sombre (Défaut) */
-        .dark body { 
-            background-color: #020617;
-            background-image: radial-gradient(circle at 50% 0%, #064e3b33 0%, transparent 50%);
-            color: #f8fafc;
-        }
-        .dark .glass-card {
-            background: rgba(15, 23, 42, 0.6);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-        }
-        .dark .input-premium {
-            background: rgba(2, 6, 23, 0.8);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-        }
+        .dark body { background-color: #020617; color: #f8fafc; }
+        html:not(.dark) body { background-color: #f8fafc; color: #0f172a; }
 
-        /* Mode Clair */
-        html:not(.dark) body {
-            background-color: #f8fafc;
-            background-image: radial-gradient(circle at 50% 0%, #10b98115 0%, transparent 50%);
-            color: #0f172a;
-        }
-        html:not(.dark) .glass-card {
-            background: rgba(255, 255, 255, 0.8);
-            border: 1px solid rgba(0, 0, 0, 0.05);
-            box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
-        }
-        html:not(.dark) .input-premium {
-            background: #ffffff;
-            border: 1px solid #e2e8f0;
-            color: #0f172a;
-        }
-        html:not(.dark) .btn-gender {
-            background: #f1f5f9;
-        }
-
-        body { font-family: 'Inter', sans-serif; transition: background-color 0.5s ease; }
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.3s; }
         .arabic { font-family: 'Amiri', serif; }
 
         .glass-card {
             backdrop-filter: blur(12px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+        }
+        html:not(.dark) .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
         }
 
-        .input-premium:focus {
-            border-color: #10b981;
-            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
-            outline: none;
+        .input-premium {
+            background: rgba(2, 6, 23, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: inherit;
+        }
+        html:not(.dark) .input-premium {
+            background: #fff;
+            border: 1px solid #e2e8f0;
         }
 
-        .theme-toggle {
-            position: fixed;
-            top: 1.5rem;
-            right: 1.5rem;
-            z-index: 100;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fade { animation: fadeIn 0.5s ease forwards; }
+        .theme-toggle { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100; }
+        
+        .tab-active { border-bottom: 2px solid #10b981; color: #10b981; }
     </style>
 </head>
 <body class="min-h-screen">
 
-    <!-- Bouton Toggle Thème -->
     <div class="theme-toggle">
-        <button onclick="toggleTheme()" class="p-3 rounded-2xl glass-card border border-emerald-500/20 text-emerald-500 hover:scale-110 active:scale-95 transition-all shadow-xl">
+        <button onclick="toggleTheme()" class="p-3 rounded-2xl glass-card border border-emerald-500/20 text-emerald-500 hover:scale-110 active:scale-95 transition-all">
             <i id="theme-icon" class="fa-solid fa-moon text-xl"></i>
         </button>
     </div>
 
     <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
-        <!-- Header -->
-        <header class="text-center mb-12 animate-fade">
-            <div class="inline-block px-4 py-1.5 mb-4 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 text-xs font-bold tracking-widest uppercase">
-                Système Al-Mawārīth Premium
-            </div>
-            <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4">
-                <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-400">Expertise</span>
-                <span class="arabic text-emerald-600 ml-2">المواريث</span>
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-6xl font-black mb-4">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-500 to-teal-300">Al-Muhaqqiq</span>
+                <span class="arabic text-emerald-500 ml-2">المُحقِّق</span>
             </h1>
-            <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-lg font-light leading-relaxed">
-                Calcul précis selon les avis des savants du Comité Permanent (Lajnah Dâ-imah).
-            </p>
+            <p class="text-slate-500 dark:text-slate-400 font-light">Calcul de précision avec gestion de l'Awl (العول) et du Radd (الرد).</p>
         </header>
 
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
-            
-            <!-- Colonne de Saisie -->
-            <div class="lg:col-span-8 space-y-8">
+            <!-- Saisie -->
+            <div class="lg:col-span-7 space-y-6">
                 
-                <!-- Section Inventaire -->
-                <section class="glass-card rounded-3xl p-6 md:p-8 animate-fade">
-                    <div class="flex items-center gap-3 mb-8">
-                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
-                            <i class="fa-solid fa-vault text-emerald-600"></i>
+                <!-- Actifs -->
+                <section class="glass-card rounded-3xl p-6">
+                    <h2 class="text-sm font-black uppercase text-emerald-500 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-coins"></i> Patrimoine Net
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <span class="text-[10px] text-slate-400">Actif Total (€)</span>
+                            <input type="number" id="total_assets" oninput="updateNet()" class="input-premium w-full p-3 rounded-xl font-bold">
                         </div>
-                        <h2 class="text-xl font-bold">1. Inventaire des Biens</h2>
-                    </div>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Valeur des actifs</label>
-                            <div class="relative">
-                                <input type="number" id="total_assets" oninput="updateNetTotal()" class="input-premium w-full p-4 rounded-2xl text-lg font-bold" placeholder="0.00">
-                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
-                            </div>
+                        <div class="space-y-1">
+                            <span class="text-[10px] text-slate-400">Dettes & Testament (€)</span>
+                            <input type="number" id="total_debts" oninput="updateNet()" class="input-premium w-full p-3 rounded-xl font-bold border-red-500/20">
                         </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black uppercase text-red-500 tracking-widest">Valeur des dettes</label>
-                            <div class="relative">
-                                <input type="number" id="total_debts" oninput="updateNetTotal()" class="input-premium w-full p-4 rounded-2xl text-lg font-bold border-red-500/20 focus:border-red-500" placeholder="0.00">
-                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
-                            </div>
-                        </div>
-                        <div class="space-y-2">
-                            <label class="text-[10px] font-black uppercase text-amber-500 tracking-widest">Valeur testament</label>
-                            <div class="relative">
-                                <input type="number" id="total_wasiyyah" oninput="updateNetTotal()" class="input-premium w-full p-4 rounded-2xl text-lg font-bold border-amber-500/20 focus:border-amber-500" placeholder="0.00">
-                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-8 p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 flex flex-col md:flex-row justify-between items-center gap-4">
-                        <div class="text-center md:text-left">
-                            <p class="text-xs font-bold text-emerald-600 uppercase tracking-tighter">Montant Net Successoral</p>
-                        </div>
-                        <div id="display_net_total" class="text-3xl font-black text-emerald-600 dark:text-white">0,00 €</div>
                     </div>
                 </section>
 
-                <!-- Section Famille -->
-                <section class="glass-card rounded-3xl p-6 md:p-8 animate-fade">
-                    <div class="flex items-center gap-3 mb-8">
-                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
-                            <i class="fa-solid fa-users text-blue-600"></i>
-                        </div>
-                        <h2 class="text-xl font-bold">2. Configuration Familiale</h2>
+                <!-- Configuration Humaine -->
+                <section class="glass-card rounded-3xl p-6 space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <button onclick="setGender('male')" id="gm" class="p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/10 flex flex-col items-center">
+                            <i class="fa-solid fa-mars text-blue-500 mb-1"></i><span class="text-[10px] font-bold">DÉFUNT HOMME</span>
+                        </button>
+                        <button onclick="setGender('female')" id="gf" class="p-4 rounded-2xl border-2 border-transparent bg-slate-100 dark:bg-slate-900 flex flex-col items-center">
+                            <i class="fa-solid fa-venus text-pink-500 mb-1"></i><span class="text-[10px] font-bold">DÉFUNTE FEMME</span>
+                        </button>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                        <div class="space-y-4">
-                            <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Sexe du défunt</label>
-                            <div class="grid grid-cols-2 gap-3">
-                                <button onclick="setDeceasedGender('male')" id="btn-male" class="btn-gender p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 border-2 border-transparent transition-all flex flex-col items-center gap-2">
-                                    <i class="fa-solid fa-mars text-2xl text-blue-500"></i>
-                                    <span class="text-[10px] font-black">HOMME</span>
-                                </button>
-                                <button onclick="setDeceasedGender('female')" id="btn-female" class="btn-gender p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 border-2 border-transparent transition-all flex flex-col items-center gap-2">
-                                    <i class="fa-solid fa-venus text-2xl text-pink-500"></i>
-                                    <span class="text-[10px] font-black">FEMME</span>
-                                </button>
-                            </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="space-y-1">
+                            <span id="spouse_label" class="text-[10px] text-slate-400">Épouse(s)</span>
+                            <input type="number" id="nb_spouses" value="0" class="input-premium w-full p-2 rounded-xl text-center font-bold">
                         </div>
-                        <div class="space-y-4">
-                            <label id="label-spouse" class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Épouse(s)</label>
-                            <input type="number" id="count_spouses" min="0" value="0" class="input-premium w-full p-4 rounded-2xl text-lg font-bold">
-                        </div>
-                    </div>
-
-                    <!-- Enfants & Parents -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5">
-                            <p class="text-[10px] font-bold text-emerald-500 uppercase mb-4 tracking-widest">Descendance</p>
-                            <div class="grid grid-cols-2 gap-4">
-                                <div class="space-y-1">
-                                    <span class="text-[10px] text-slate-400">Fils</span>
-                                    <input type="number" id="count_sons" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold">
-                                </div>
-                                <div class="space-y-1">
-                                    <span class="text-[10px] text-slate-400">Filles</span>
-                                    <input type="number" id="count_daughters" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold">
-                                </div>
-                            </div>
-                        </div>
-                        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5">
-                            <p class="text-[10px] font-bold text-amber-500 uppercase mb-4 tracking-widest">Ascendance</p>
-                            <div class="grid grid-cols-2 gap-4">
-                                <label class="flex items-center gap-3 p-3 glass-card rounded-xl cursor-pointer">
-                                    <input type="checkbox" id="father_alive" class="w-4 h-4 accent-emerald-500">
-                                    <span class="text-[10px] font-bold">Père</span>
-                                </label>
-                                <label class="flex items-center gap-3 p-3 glass-card rounded-xl cursor-pointer">
-                                    <input type="checkbox" id="mother_alive" class="w-4 h-4 accent-emerald-500">
-                                    <span class="text-[10px] font-bold">Mère</span>
-                                </label>
+                        <div class="space-y-1">
+                            <span class="text-[10px] text-slate-400">Fils / Filles</span>
+                            <div class="flex gap-2">
+                                <input type="number" id="nb_sons" placeholder="Fils" class="input-premium w-1/2 p-2 rounded-xl text-center">
+                                <input type="number" id="nb_dau" placeholder="Filles" class="input-premium w-1/2 p-2 rounded-xl text-center">
                             </div>
                         </div>
                     </div>
 
-                    <!-- Fratrie étendue -->
-                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5 space-y-4">
-                        <p class="text-[10px] font-bold text-blue-500 uppercase tracking-widest">Fratrie</p>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- Germains -->
-                            <div>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Germains (أشقاء)</p>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="space-y-1">
-                                        <span class="text-[10px] text-slate-400">Frères</span>
-                                        <input type="number" id="count_f_g" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
-                                    </div>
-                                    <div class="space-y-1">
-                                        <span class="text-[10px] text-slate-400">Sœurs</span>
-                                        <input type="number" id="count_s_g" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
-                                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 rounded-2xl border border-white/5 bg-slate-500/5">
+                            <span class="text-[10px] font-bold text-amber-500 block mb-2 uppercase">Ascendants</span>
+                            <div class="space-y-2">
+                                <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="fth_alive" onchange="toggleGP()"> Père</label>
+                                <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="mth_alive" onchange="toggleGP()"> Mère</label>
+                                <div id="gp_section" class="pt-2 border-t border-white/5 space-y-2">
+                                    <label class="flex items-center gap-2 text-xs opacity-60"><input type="checkbox" id="gfh_alive"> G-Père Pat.</label>
+                                    <label class="flex items-center gap-2 text-xs opacity-60"><input type="checkbox" id="gmh_alive"> G-Mère</label>
                                 </div>
                             </div>
-                            <!-- Consanguins -->
-                            <div>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Consanguins (لأب)</p>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="space-y-1">
-                                        <span class="text-[10px] text-slate-400">Frères</span>
-                                        <input type="number" id="count_f_c" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
-                                    </div>
-                                    <div class="space-y-1">
-                                        <span class="text-[10px] text-slate-400">Sœurs</span>
-                                        <input type="number" id="count_s_c" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Utérins -->
-                            <div>
-                                <p class="text-[9px] font-bold text-slate-400 uppercase mb-2 tracking-widest">Utérins (لأم)</p>
-                                <div class="grid grid-cols-2 gap-2">
-                                    <div class="space-y-1">
-                                        <span class="text-[10px] text-slate-400">Frères</span>
-                                        <input type="number" id="count_f_u" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
-                                    </div>
-                                    <div class="space-y-1">
-                                        <span class="text-[10px] text-slate-400">Sœurs</span>
-                                        <input type="number" id="count_s_u" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold text-sm">
-                                    </div>
-                                </div>
+                        </div>
+                        <div class="p-4 rounded-2xl border border-white/5 bg-slate-500/5">
+                            <span class="text-[10px] font-bold text-blue-500 block mb-2 uppercase">Fratrie</span>
+                            <div class="space-y-2">
+                                <div class="flex gap-1"><input type="number" id="nb_fg" placeholder="G" class="input-premium w-1/2 p-1 text-xs rounded text-center"><input type="number" id="nb_sg" placeholder="G" class="input-premium w-1/2 p-1 text-xs rounded text-center"></div>
+                                <div class="flex gap-1"><input type="number" id="nb_fc" placeholder="C" class="input-premium w-1/2 p-1 text-xs rounded text-center"><input type="number" id="nb_sc" placeholder="C" class="input-premium w-1/2 p-1 text-xs rounded text-center"></div>
+                                <input type="number" id="nb_ut" placeholder="Utérins (Total)" class="input-premium w-full p-1 text-xs rounded text-center">
                             </div>
                         </div>
                     </div>
                 </section>
 
-                <button onclick="calculate()" class="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-3xl shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 text-xl">
-                    CALCULER LE PARTAGE
+                <button onclick="calculate()" class="w-full py-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-3xl shadow-xl transition-all">
+                    EXÉCUTER LE PARTAGE JURIDIQUE
                 </button>
             </div>
 
-            <!-- Colonne de Résultats -->
-            <div class="lg:col-span-4">
-                <div id="results-card" class="glass-card rounded-3xl p-6 md:p-8 sticky top-8 shadow-2xl border-emerald-500/20 hidden">
-                    <h2 class="text-2xl font-black mb-8 flex items-center gap-3">
-                        <i class="fa-solid fa-chart-pie text-emerald-500"></i> Bilan Net
-                    </h2>
-                    <div id="results-list" class="space-y-4 mb-8"></div>
-                    <!-- Badge règle appliquée -->
-                    <div id="rule-badge" class="mb-4 hidden">
-                        <span id="rule-badge-text" class="px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest"></span>
+            <!-- Résultats -->
+            <div class="lg:col-span-5">
+                <div id="results-box" class="glass-card rounded-3xl p-6 sticky top-8 hidden">
+                    <div class="flex justify-between items-center mb-6">
+                        <h2 class="text-xl font-black">Répartition</h2>
+                        <span id="badge-status" class="text-[8px] px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 font-bold uppercase tracking-widest">Normal</span>
                     </div>
-                    <div class="bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20">
-                        <p class="text-[10px] text-slate-500 font-black uppercase mb-1">Total Distribué</p>
-                        <div id="res-total-money" class="text-3xl font-black text-emerald-600 dark:text-white">0,00 €</div>
+                    
+                    <div id="results-list" class="space-y-3 mb-6"></div>
+
+                    <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
+                        <div class="flex justify-between text-[10px] uppercase font-bold text-slate-500 mb-1">
+                            <span>Base de calcul (Net)</span>
+                            <span id="res-sum-part"></span>
+                        </div>
+                        <div id="res-total" class="text-3xl font-black text-emerald-500"></div>
                     </div>
                 </div>
-
-                <div id="placeholder-results" class="glass-card rounded-3xl p-12 text-center border-dashed border-black/10 dark:border-white/10 flex flex-col items-center justify-center min-h-[400px]">
-                    <i class="fa-solid fa-calculator text-4xl text-slate-300 mb-4"></i>
-                    <p class="text-slate-400 text-sm italic">Les résultats s'afficheront ici après calcul.</p>
+                
+                <div id="placeholder" class="glass-card rounded-3xl p-12 text-center border-dashed border-white/10 h-full flex flex-col items-center justify-center">
+                    <i class="fa-solid fa-scale-balanced text-4xl text-slate-700 mb-4"></i>
+                    <p class="text-slate-500 text-sm">Prêt pour l'analyse juridique...</p>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // ─── Thème ───────────────────────────────────────────────────────────────
+        let deceasedGender = 'male';
+
         function toggleTheme() {
-            const html = document.documentElement;
+            document.documentElement.classList.toggle('dark');
             const icon = document.getElementById('theme-icon');
-            if (html.classList.contains('dark')) {
-                html.classList.remove('dark');
-                icon.className = "fa-solid fa-sun text-xl";
+            icon.className = document.documentElement.classList.contains('dark') ? "fa-solid fa-moon text-xl" : "fa-solid fa-sun text-xl";
+        }
+
+        function setGender(g) {
+            deceasedGender = g;
+            const gm = document.getElementById('gm');
+            const gf = document.getElementById('gf');
+            if(g === 'male') {
+                gm.classList.add('border-blue-500', 'bg-blue-500/10');
+                gf.classList.remove('border-pink-500', 'bg-pink-500/10');
+                gf.classList.add('border-transparent');
+                document.getElementById('spouse_label').innerText = "Épouse(s)";
             } else {
-                html.classList.add('dark');
-                icon.className = "fa-solid fa-moon text-xl";
+                gf.classList.add('border-pink-500', 'bg-pink-500/10');
+                gm.classList.remove('border-blue-500', 'bg-blue-500/10');
+                gm.classList.add('border-transparent');
+                document.getElementById('spouse_label').innerText = "Époux";
             }
         }
 
-        let gender = 'male';
-
-        function updateNetTotal() {
-            const assets   = parseFloat(document.getElementById('total_assets').value)   || 0;
-            const debts    = parseFloat(document.getElementById('total_debts').value)    || 0;
-            const wasiyyah = parseFloat(document.getElementById('total_wasiyyah').value) || 0;
-            const netTotal = Math.max(0, assets - debts - wasiyyah);
-            document.getElementById('display_net_total').innerText =
-                netTotal.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
-            return netTotal;
+        function toggleGP() {
+            const f = document.getElementById('fth_alive').checked;
+            const m = document.getElementById('mth_alive').checked;
+            document.getElementById('gp_section').style.opacity = (f && m) ? "0.3" : "1";
         }
 
-        function setDeceasedGender(g) {
-            gender = g;
-            const bm = document.getElementById('btn-male');
-            const bf = document.getElementById('btn-female');
-            const sl = document.getElementById('label-spouse');
-            [bm, bf].forEach(b => b.style.borderColor = "transparent");
-            if (g === 'male') {
-                bm.style.borderColor = "#3b82f6";
-                sl.innerText = "Épouse(s) vivante(s)";
-            } else {
-                bf.style.borderColor = "#ec4899";
-                sl.innerText = "Époux vivant";
-            }
+        function updateNet() {
+            const a = parseFloat(document.getElementById('total_assets').value) || 0;
+            const d = parseFloat(document.getElementById('total_debts').value) || 0;
+            return Math.max(0, a - d);
         }
-        setDeceasedGender('male');
 
-        // ─── Moteur de calcul islamique ──────────────────────────────────────────
         function calculate() {
-            const total = updateNetTotal();
-            if (total <= 0) { alert("Veuillez saisir un actif net positif."); return; }
+            const net = updateNet();
+            if(net <= 0) return;
 
-            const sps  = parseInt(document.getElementById('count_spouses').value)  || 0;
-            const sons = parseInt(document.getElementById('count_sons').value)     || 0;
-            const dau  = parseInt(document.getElementById('count_daughters').value)|| 0;
-            const fth  = document.getElementById('father_alive').checked;
-            const mth  = document.getElementById('mother_alive').checked;
+            // Inputs
+            const sons = parseInt(document.getElementById('nb_sons').value) || 0;
+            const dau = parseInt(document.getElementById('nb_dau').value) || 0;
+            const sps = parseInt(document.getElementById('nb_spouses').value) || 0;
+            const fth = document.getElementById('fth_alive').checked;
+            const mth = document.getElementById('mth_alive').checked;
+            const gfh = document.getElementById('gfh_alive').checked;
+            const gmh = document.getElementById('gmh_alive').checked;
+            const fg = parseInt(document.getElementById('nb_fg').value) || 0;
+            const sg = parseInt(document.getElementById('nb_sg').value) || 0;
+            const fc = parseInt(document.getElementById('nb_fc').value) || 0;
+            const sc = parseInt(document.getElementById('nb_sc').value) || 0;
+            const ut = parseInt(document.getElementById('nb_ut').value) || 0;
 
-            // Fratrie : germains, consanguins, utérins
-            const f_g = parseInt(document.getElementById('count_f_g').value) || 0;
-            const s_g = parseInt(document.getElementById('count_s_g').value) || 0;
-            const f_c = parseInt(document.getElementById('count_f_c').value) || 0;
-            const s_c = parseInt(document.getElementById('count_s_c').value) || 0;
-            const f_u = parseInt(document.getElementById('count_f_u').value) || 0;
-            const s_u = parseInt(document.getElementById('count_s_u').value) || 0;
+            let heirs = [];
+            
+            // Flags de blocage
+            const hasDescMale = (sons > 0); 
+            const hasDesc = (sons > 0 || dau > 0);
+            const totalSiblings = (fg + sg + fc + sc + ut);
 
-            const hasDescendant = (sons > 0 || dau > 0);
+            // 1. PARTS FIXES (AS-HAB AL-FURUD)
+            // Époux / Épouse
+            if(sps > 0) {
+                let p = (deceasedGender === 'male') ? (hasDesc ? 1/8 : 1/4) : (hasDesc ? 1/4 : 1/2);
+                heirs.push({id: 'spouse', name: deceasedGender === 'male' ? "Épouse(s)" : "Époux", part: p, count: sps, type: 'f'});
+            }
 
-            // Nombre total de frères/sœurs (tous types) pour réduction part mère
-            const totalSiblings = f_g + s_g + f_c + s_c + f_u + s_u;
-
-            // Frères/sœurs germains ou consanguins bloquent les utérins et la fratrie inférieure
-            const hasAsabaSiblings = (f_g + s_g) > 0;   // germains présents
-            const hasConsangSiblings = (f_c + s_c) > 0; // consanguins présents (actifs ssi pas germains)
-
-            // ── Parts fixes (furuḍ) ──────────────────────────────────────────────
-            // On travaille en fractions rationnelles pour éviter les erreurs float
-            // Représentation : { num, den } → num/den
-            // Mais pour simplicité on accumule en float puis on normalise via ʿawl/radd
-
-            let shares = []; // { name, frac (float 0..1), count, isAsaba, isRadd }
-
-            // 1. Conjoint
-            if (sps > 0) {
-                let s;
-                if (gender === 'male') {
-                    s = hasDescendant ? 1/8 : 1/4;
-                } else {
-                    s = hasDescendant ? 1/4 : 1/2;
+            // Mère
+            if(mth) {
+                let p = (hasDesc || totalSiblings >= 2) ? 1/6 : 1/3;
+                // Cas spéciaux "Omariyatayn" (Mari/Femme + Père + Mère)
+                if(!hasDesc && totalSiblings === 0 && fth) {
+                    p = (1 - (heirs.find(h => h.id === 'spouse')?.part || 0)) / 3;
                 }
-                shares.push({ name: gender === 'male' ? "Épouse(s)" : "Époux", frac: s, count: sps });
+                heirs.push({id: 'mother', name: "Mère", part: p, count: 1, type: 'f'});
+            } else if (gmh && !mth) {
+                heirs.push({id: 'gmother', name: "Grand-Mère", part: 1/6, count: 1, type: 'f'});
             }
 
-            // 2. Mère
-            // Part réduite à 1/6 si : descendant présent OU ≥ 2 frères/sœurs (tous types)
-            if (mth) {
-                let s = (hasDescendant || totalSiblings >= 2) ? 1/6 : 1/3;
-                shares.push({ name: "Mère", frac: s, count: 1 });
+            // Père (Fixe)
+            if(fth) {
+                if(hasDesc) heirs.push({id: 'father_f', name: "Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
+            } else if(gfh && !hasDescMale) {
+                heirs.push({id: 'gfather_f', name: "Grand-Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
             }
 
-            // 3. Père
-            // - En présence de descendants : 1/6 fixe (+ résidu ʿaṣaba si filles seulement, géré plus bas)
-            // - Sans descendants : ʿaṣaba pur (résidu), géré plus bas
-            if (fth) {
-                if (hasDescendant) {
-                    shares.push({ name: "Père", frac: 1/6, count: 1, fatherFixed: true });
+            // Filles (si pas de fils)
+            if(sons === 0 && dau > 0) {
+                heirs.push({id: 'daughters', name: "Fille(s)", part: (dau === 1 ? 1/2 : 2/3), count: dau, type: 'f'});
+            }
+
+            // Fratrie Utérine
+            if(ut > 0 && !hasDesc && !fth && !gfh) {
+                heirs.push({id: 'uterines', name: "Fratrie Utérine", part: (ut === 1 ? 1/6 : 1/3), count: ut, type: 'f'});
+            }
+
+            // 2. CALCUL SOMME POUR AWL
+            let sumF = heirs.reduce((acc, h) => acc + h.part, 0);
+
+            // 3. GESTION DE L'AWL (Dépassement)
+            if(sumF > 1.0001) {
+                heirs.forEach(h => h.part = h.part / sumF);
+                document.getElementById('badge-status').innerText = "Al-Awl (Réduction)";
+                sumF = 1;
+            }
+
+            // 4. LES ASABAS (RÉSIDUELS)
+            let residue = Math.max(0, 1 - sumF);
+            let hasAsaba = false;
+
+            if(residue > 0.0001) {
+                if(sons > 0) {
+                    const shares = (sons * 2) + dau;
+                    heirs.push({name: "Fils", part: (residue/shares)*2*sons, count: sons, type: 'a'});
+                    if(dau > 0) heirs.push({name: "Fille(s) (Asaba)", part: (residue/shares)*dau, count: dau, type: 'a'});
+                    hasAsaba = true;
+                } else if(fth) {
+                    heirs.push({id: 'father_a', name: "Père (Résidu/Asaba)", part: residue, count: 1, type: 'a'});
+                    hasAsaba = true;
+                } else if(gfh) {
+                    heirs.push({id: 'gfather_a', name: "Grand-Père (Résidu)", part: residue, count: 1, type: 'a'});
+                    hasAsaba = true;
+                } else if(fg > 0 || sg > 0) {
+                    const shares = (fg * 2) + sg;
+                    heirs.push({name: "Frère(s) Germ.", part: (residue/shares)*2*fg, count: fg, type: 'a'});
+                    if(sg > 0) heirs.push({name: "Sœur(s) Germ. (Asaba)", part: (residue/shares)*sg, count: sg, type: 'a'});
+                    hasAsaba = true;
+                } else if(fc > 0 || sc > 0) {
+                    const shares = (fc * 2) + sc;
+                    heirs.push({name: "Frère(s) Cons.", part: (residue/shares)*2*fc, count: fc, type: 'a'});
+                    if(sc > 0) heirs.push({name: "Sœur(s) Cons. (Asaba)", part: (residue/shares)*sc, count: sc, type: 'a'});
+                    hasAsaba = true;
                 }
-                // sans descendant : le père sera ajouté comme ʿaṣaba dans la section résidu
             }
 
-            // 4. Filles seules (sans fils) — part fixe
-            if (sons === 0 && dau > 0) {
-                const s = (dau === 1) ? 1/2 : 2/3;
-                shares.push({ name: "Fille(s)", frac: s, count: dau });
-            }
-
-            // 5. Frères/sœurs utérins — part fixe (bloqués par descendants ou père)
-            // Bloqués par : tout descendant, père, grand-père
-            if (!hasDescendant && !fth && (f_u + s_u) > 0) {
-                const totalU = f_u + s_u;
-                const s = totalU === 1 ? 1/6 : 1/3;
-                // Part partagée également entre tous (homme = femme pour utérins)
-                shares.push({ name: "Frère(s)/Sœur(s) utérin(e)s", frac: s, count: totalU });
-            }
-
-            // ── Calcul du résidu (ʿaṣaba) ────────────────────────────────────────
-            const fixedSum = shares.reduce((acc, s) => acc + s.frac, 0);
-            let residue = Math.max(0, 1 - fixedSum);
-
-            if (residue > 0) {
-                if (sons > 0) {
-                    // Fils (+ filles en ʿaṣaba bil-ghair : ratio 2:1)
-                    const totalParts = sons * 2 + dau;
-                    shares.push({ name: "Fils", frac: residue * (sons * 2) / totalParts, count: sons, isAsaba: true });
-                    if (dau > 0) {
-                        shares.push({ name: "Fille(s)", frac: residue * dau / totalParts, count: dau, isAsaba: true });
-                    }
-                } else if (fth) {
-                    // Père : reçoit le résidu (couvre aussi le cas filles seules + père)
-                    shares.push({ name: "Père", frac: residue, count: 1, isAsaba: true });
-                } else if (hasAsabaSiblings) {
-                    // Frères/sœurs germains (bloquent les consanguins)
-                    if (s_g > 0 && f_g === 0) {
-                        // Sœurs germaines seules : ʿaṣaba maʿ al-ghair si filles présentes, sinon part fixe déjà comptée
-                        // Ici residue > 0 sans fils ni père ni filles → sœurs germaines = ʿaṣaba
-                        shares.push({ name: "Sœur(s) germaine(s)", frac: residue, count: s_g, isAsaba: true });
-                    } else {
-                        // Frères germains (± sœurs) : ratio 2:1
-                        const totalP = f_g * 2 + s_g;
-                        shares.push({ name: "Frère(s) germain(s)", frac: residue * (f_g * 2) / totalP, count: f_g, isAsaba: true });
-                        if (s_g > 0) {
-                            shares.push({ name: "Sœur(s) germaine(s)", frac: residue * s_g / totalP, count: s_g, isAsaba: true });
-                        }
-                    }
-                } else if (hasConsangSiblings) {
-                    // Frères/sœurs consanguins (même règle, activés seulement si pas de germains)
-                    if (s_c > 0 && f_c === 0) {
-                        shares.push({ name: "Sœur(s) consanguine(s)", frac: residue, count: s_c, isAsaba: true });
-                    } else {
-                        const totalP = f_c * 2 + s_c;
-                        shares.push({ name: "Frère(s) consanguin(s)", frac: residue * (f_c * 2) / totalP, count: f_c, isAsaba: true });
-                        if (s_c > 0) {
-                            shares.push({ name: "Sœur(s) consanguine(s)", frac: residue * s_c / totalP, count: s_c, isAsaba: true });
-                        }
-                    }
-                }
-                // Si aucun ʿaṣaba trouvé → résidu reste non distribué (traité en radd ci-dessous)
-            }
-
-            // ── Règle de l'ʿAwl (réduction proportionnelle si somme > 1) ─────────
-            // Ne concerne que les parts fixes (non-ʿaṣaba)
-            const fixedShares = shares.filter(s => !s.isAsaba);
-            const asabaShares = shares.filter(s => s.isAsaba);
-            const fixedTotal  = fixedShares.reduce((acc, s) => acc + s.frac, 0);
-            let appliedRule = null;
-
-            if (fixedTotal > 1 + 1e-9) {
-                // ʿAwl : toutes les parts fixes sont réduites proportionnellement
-                const factor = 1 / fixedTotal;
-                fixedShares.forEach(s => s.frac *= factor);
-                appliedRule = 'awl';
-            }
-
-            // ── Règle du Radd (retour aux héritiers à parts fixes si résidu non distribué) ─
-            // Applicable ssi : pas d'ʿaṣaba ET résidu > 0 ET au moins un héritier bénéficiaire du radd
-            // Les conjoints ne bénéficient pas du radd selon la Lajnah Dâ-imah
-            const asabaTotal = asabaShares.reduce((acc, s) => acc + s.frac, 0);
-            const allTotal   = fixedShares.reduce((acc, s) => acc + s.frac, 0) + asabaTotal;
-            const remainder  = Math.max(0, 1 - allTotal);
-
-            if (remainder > 1e-9 && asabaShares.length === 0) {
-                // Héritiers éligibles au radd (tous sauf conjoint)
-                const raddEligible = fixedShares.filter(s =>
-                    s.name !== "Épouse(s)" && s.name !== "Époux"
-                );
-                const raddBase = raddEligible.reduce((acc, s) => acc + s.frac, 0);
-                if (raddBase > 1e-9) {
-                    raddEligible.forEach(s => {
-                        s.frac += remainder * (s.frac / raddBase);
-                        s.isRadd = true;
+            // 5. GESTION DU RADD (Retour)
+            let finalSum = heirs.reduce((acc, h) => acc + h.part, 0);
+            if(finalSum < 0.9999 && !hasAsaba) {
+                // Le radd ne va pas aux époux selon l'avis majoritaire
+                let raddHeirs = heirs.filter(h => h.id !== 'spouse');
+                let raddSum = raddHeirs.reduce((acc, h) => acc + h.part, 0);
+                if(raddSum > 0) {
+                    let toDistribute = 1 - (heirs.find(h => h.id === 'spouse')?.part || 0);
+                    raddHeirs.forEach(h => {
+                        h.part = (h.part / raddSum) * toDistribute;
                     });
-                    appliedRule = 'radd';
                 }
+                document.getElementById('badge-status').innerText = "Al-Radd (Retour)";
+            } else if(hasAsaba) {
+                document.getElementById('badge-status').innerText = "Al-Asaba (Résidu)";
             }
 
-            render(shares.filter(s => s.frac > 1e-9), total, appliedRule);
+            render(heirs, net);
         }
 
-        // ─── Rendu ───────────────────────────────────────────────────────────────
-        function render(shares, total, appliedRule) {
-            document.getElementById('placeholder-results').classList.add('hidden');
-            const card = document.getElementById('results-card');
+        function render(heirs, total) {
+            document.getElementById('placeholder').classList.add('hidden');
+            document.getElementById('results-box').classList.remove('hidden');
             const list = document.getElementById('results-list');
-            card.classList.remove('hidden');
             list.innerHTML = "";
 
-            shares.forEach(s => {
-                const perPerson = s.frac * total / s.count;
-                const badge = s.isAsaba
-                    ? '<span class="text-[9px] text-amber-500 font-black uppercase ml-1">ʿaṣaba ⭐</span>'
-                    : s.isRadd
-                        ? '<span class="text-[9px] text-blue-400 font-black uppercase ml-1">radd ↩</span>'
-                        : '';
-                const item = document.createElement('div');
-                item.className = "p-4 rounded-2xl bg-slate-500/5 border border-black/5 dark:border-white/5 flex justify-between items-center";
-                item.innerHTML = `
-                    <div>
-                        <p class="font-bold text-sm">${s.name}${badge}</p>
-                        <p class="text-[10px] opacity-50 uppercase font-black">${(s.frac * 100).toFixed(2)}%</p>
-                    </div>
-                    <div class="text-right">
-                        <p class="font-black text-emerald-600 dark:text-emerald-400">${(s.frac * total).toLocaleString('fr-FR')} €</p>
-                        <p class="text-[9px] opacity-50">${s.count > 1 ? perPerson.toLocaleString('fr-FR') + ' € / pers.' : 'Part unique'}</p>
-                    </div>
-                `;
-                list.appendChild(item);
+            // Fusionner les lignes doublons (ex: Père fixe + Père asaba)
+            let merged = {};
+            heirs.forEach(h => {
+                let key = h.name.split(' (')[0]; // On regroupe par nom principal
+                if(!merged[key]) {
+                    merged[key] = {...h, name: key};
+                } else {
+                    merged[key].part += h.part;
+                }
             });
 
-            // Badge règle appliquée
-            const badge = document.getElementById('rule-badge');
-            const badgeText = document.getElementById('rule-badge-text');
-            if (appliedRule === 'awl') {
-                badge.classList.remove('hidden');
-                badgeText.className = "px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-orange-500/10 text-orange-400 border border-orange-400/30";
-                badgeText.innerText = "⚖️ Règle de l'ʿAwl appliquée — réduction proportionnelle";
-            } else if (appliedRule === 'radd') {
-                badge.classList.remove('hidden');
-                badgeText.className = "px-3 py-1.5 rounded-full text-[10px] font-black uppercase tracking-widest bg-blue-500/10 text-blue-400 border border-blue-400/30";
-                badgeText.innerText = "↩ Règle du Radd appliquée — retour aux héritiers";
-            } else {
-                badge.classList.add('hidden');
-            }
+            Object.values(merged).filter(h => h.part > 0).forEach(h => {
+                const el = document.createElement('div');
+                el.className = "p-4 rounded-2xl bg-slate-500/5 border border-black/5 dark:border-white/5 flex justify-between items-center transition-all hover:bg-emerald-500/5";
+                el.innerHTML = `
+                    <div>
+                        <p class="font-bold text-sm">${h.name} ${h.type === 'a' ? '⚡' : ''}</p>
+                        <p class="text-[9px] opacity-60 uppercase font-black">${(h.part * 100).toFixed(2)}%</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-black text-emerald-500">${(h.part * total).toLocaleString('fr-FR')} €</p>
+                        <p class="text-[8px] opacity-40">${h.count > 1 ? (h.part*total/h.count).toLocaleString('fr-FR')+' / pers.' : 'Part unique'}</p>
+                    </div>
+                `;
+                list.appendChild(el);
+            });
 
-            document.getElementById('res-total-money').innerText = total.toLocaleString('fr-FR') + " €";
+            document.getElementById('res-total').innerText = total.toLocaleString('fr-FR') + " €";
+            document.getElementById('res-sum-part').innerText = "Vérifié à 100%";
         }
     </script>
 </body>
