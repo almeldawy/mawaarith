@@ -91,23 +91,23 @@
                     <p class="mt-4 text-[10px] text-slate-500 italic">Note pour les convertis : Vous pouvez léguer jusqu'à 1/3 de vos biens à vos proches non-musulmans via un testament (Wasiyyah).</p>
                 </section>
 
-                <!-- Lexique (Nouveau) -->
+                <!-- Lexique -->
                 <section class="glass-card rounded-3xl p-6">
                     <h2 class="text-xs font-black uppercase text-blue-500 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-book-open"></i> Lexique de la Fratrie (Hachimi)
+                        <i class="fa-solid fa-book-open"></i> Lexique & Règles Spécifiques
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
                         <div class="lexique-item">
                             <p class="text-[10px] font-bold text-emerald-500 uppercase">Germains</p>
-                            <p class="text-[11px] leading-tight text-slate-400">Même père ET même mère. Prioritaires sur les autres.</p>
+                            <p class="text-[11px] leading-tight text-slate-400">Même père ET même mère. Prioritaires.</p>
                         </div>
                         <div class="lexique-item">
                             <p class="text-[10px] font-bold text-blue-500 uppercase">Consanguins</p>
-                            <p class="text-[11px] leading-tight text-slate-400">Même père, mères différentes. Héritent si pas de germains mâles.</p>
+                            <p class="text-[11px] leading-tight text-slate-400">Même père, mères différentes.</p>
                         </div>
                         <div class="lexique-item">
-                            <p class="text-[10px] font-bold text-amber-500 uppercase">Utérins</p>
-                            <p class="text-[11px] leading-tight text-slate-400">Même mère, pères différents. Part fixe de 1/6 ou 1/3.</p>
+                            <p class="text-[10px] font-bold text-amber-500 uppercase">Grands-Mères</p>
+                            <p class="text-[11px] leading-tight text-slate-400">Si la mère est absente, les deux se partagent le 1/6 équitablement.</p>
                         </div>
                     </div>
                 </section>
@@ -125,7 +125,7 @@
 
                     <div class="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20">
                         <p class="text-[10px] font-bold text-amber-500 mb-2 uppercase"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Important</p>
-                        <p class="text-[11px] text-slate-400">Ne cochez/saisissez que les héritiers qui sont **Musulmans**. Les non-musulmans sont légalement exclus du partage des parts fixes.</p>
+                        <p class="text-[11px] text-slate-400">Ne cochez/saisissez que les héritiers qui sont **Musulmans**. Les non-musulmans sont exclus du partage des parts fixes.</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -149,8 +149,9 @@
                                 <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="fth_alive" onchange="toggleGP()"> Père</label>
                                 <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="mth_alive" onchange="toggleGP()"> Mère</label>
                                 <div id="gp_section" class="pt-2 border-t border-white/5 space-y-2">
-                                    <label class="flex items-center gap-2 text-xs opacity-60"><input type="checkbox" id="gfh_alive"> G-Père Pat.</label>
-                                    <label class="flex items-center gap-2 text-xs opacity-60"><input type="checkbox" id="gmh_alive"> G-Mère</label>
+                                    <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="gfp_alive"> G-Père Pat.</label>
+                                    <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="gmp_alive"> G-Mère Pat.</label>
+                                    <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="gmm_alive"> G-Mère Mat.</label>
                                 </div>
                             </div>
                         </div>
@@ -187,7 +188,7 @@
                         </div>
                         <div id="res-total" class="text-3xl font-black text-emerald-500"></div>
                         <p id="converti-msg" class="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[10px] text-amber-600 dark:text-amber-400 hidden">
-                            <strong>Note :</strong> Si vos parents ou enfants ne sont pas musulmans, ils ne figurent pas ici. Vous devriez envisager de leur léguer une part via le champ "Legs" (maximum 1/3 de l'actif total).
+                            <strong>Note :</strong> Seuls les héritiers musulmans sont affichés.
                         </p>
                     </div>
                 </div>
@@ -227,9 +228,7 @@
         }
 
         function toggleGP() {
-            const f = document.getElementById('fth_alive').checked;
-            const m = document.getElementById('mth_alive').checked;
-            document.getElementById('gp_section').style.opacity = (f && m) ? "0.3" : "1";
+            // Logique de visibilité simplifiée
         }
 
         function updateNet() {
@@ -247,8 +246,10 @@
             const sps = parseInt(document.getElementById('nb_spouses').value) || 0;
             const fth = document.getElementById('fth_alive').checked;
             const mth = document.getElementById('mth_alive').checked;
-            const gfh = document.getElementById('gfh_alive').checked;
-            const gmh = document.getElementById('gmh_alive').checked;
+            const gfp = document.getElementById('gfp_alive').checked;
+            const gmp = document.getElementById('gmp_alive').checked;
+            const gmm = document.getElementById('gmm_alive').checked;
+            
             const fg = parseInt(document.getElementById('nb_fg').value) || 0;
             const sg = parseInt(document.getElementById('nb_sg').value) || 0;
             const fc = parseInt(document.getElementById('nb_fc').value) || 0;
@@ -260,43 +261,60 @@
             const hasDesc = (sons > 0 || dau > 0);
             const totalSiblings = (fg + sg + fc + sc + ut);
 
+            // 1. Conjoint
             if(sps > 0) {
                 let p = (deceasedGender === 'male') ? (hasDesc ? 1/8 : 1/4) : (hasDesc ? 1/4 : 1/2);
                 heirs.push({id: 'spouse', name: deceasedGender === 'male' ? "Épouse(s)" : "Époux", part: p, count: sps, type: 'f'});
             }
 
+            // 2. Mère ou Grands-Mères
             if(mth) {
                 let p = (hasDesc || totalSiblings >= 2) ? 1/6 : 1/3;
+                // Cas 'Umariyyatayn'
                 if(!hasDesc && totalSiblings === 0 && fth) {
                     p = (1 - (heirs.find(h => h.id === 'spouse')?.part || 0)) / 3;
                 }
                 heirs.push({id: 'mother', name: "Mère", part: p, count: 1, type: 'f'});
-            } else if (gmh && !mth) {
-                heirs.push({id: 'gmother', name: "Grand-Mère", part: 1/6, count: 1, type: 'f'});
+            } else {
+                // Si pas de mère, les grands-mères peuvent hériter
+                let gmp_eligible = gmp && !fth; // Le père exclut la GM paternelle selon l'avis majoritaire
+                let gmm_eligible = gmm; // La GM maternelle n'est exclue que par la mère
+
+                if (gmp_eligible && gmm_eligible) {
+                    heirs.push({id: 'gm_share', name: "Grands-Mères (Paternelle & Maternelle)", part: 1/6, count: 2, type: 'f'});
+                } else if (gmp_eligible) {
+                    heirs.push({id: 'gmp', name: "Grand-Mère Paternelle", part: 1/6, count: 1, type: 'f'});
+                } else if (gmm_eligible) {
+                    heirs.push({id: 'gmm', name: "Grand-Mère Maternelle", part: 1/6, count: 1, type: 'f'});
+                }
             }
 
+            // 3. Père ou Grand-Père
             if(fth) {
                 if(hasDesc) heirs.push({id: 'father_f', name: "Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
-            } else if(gfh && !hasDescMale) {
+            } else if(gfp && !hasDescMale) {
                 heirs.push({id: 'gfather_f', name: "Grand-Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
             }
 
+            // 4. Filles (si pas de fils)
             if(sons === 0 && dau > 0) {
                 heirs.push({id: 'daughters', name: "Fille(s)", part: (dau === 1 ? 1/2 : 2/3), count: dau, type: 'f'});
             }
 
-            if(ut > 0 && !hasDesc && !fth && !gfh) {
+            // 5. Utérins
+            if(ut > 0 && !hasDesc && !fth && !gfp) {
                 heirs.push({id: 'uterines', name: "Fratrie Utérine", part: (ut === 1 ? 1/6 : 1/3), count: ut, type: 'f'});
             }
 
+            // Calcul Al-Awl
             let sumF = heirs.reduce((acc, h) => acc + h.part, 0);
-
             if(sumF > 1.0001) {
                 heirs.forEach(h => h.part = h.part / sumF);
                 document.getElementById('badge-status').innerText = "Al-Awl (Réduction)";
                 sumF = 1;
             }
 
+            // 6. Asaba (Résidu)
             let residue = Math.max(0, 1 - sumF);
             let hasAsaba = false;
 
@@ -307,9 +325,9 @@
                     if(dau > 0) heirs.push({name: "Fille(s) (Asaba)", part: (residue/shares)*dau, count: dau, type: 'a'});
                     hasAsaba = true;
                 } else if(fth) {
-                    heirs.push({id: 'father_a', name: "Père (Résidu/Asaba)", part: residue, count: 1, type: 'a'});
+                    heirs.push({id: 'father_a', name: "Père (Résidu)", part: residue, count: 1, type: 'a'});
                     hasAsaba = true;
-                } else if(gfh) {
+                } else if(gfp) {
                     heirs.push({id: 'gfather_a', name: "Grand-Père (Résidu)", part: residue, count: 1, type: 'a'});
                     hasAsaba = true;
                 } else if(fg > 0 || sg > 0) {
@@ -325,6 +343,7 @@
                 }
             }
 
+            // Calcul Al-Radd
             let finalSum = heirs.reduce((acc, h) => acc + h.part, 0);
             if(finalSum < 0.9999 && !hasAsaba) {
                 let raddHeirs = heirs.filter(h => h.id !== 'spouse');
