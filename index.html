@@ -42,10 +42,31 @@
         .theme-toggle { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100; }
         
         .lexique-item {
-            padding: 0.75rem;
-            border-radius: 1rem;
+            padding: 1rem;
+            border-radius: 1.25rem;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.2s;
+        }
+        html:not(.dark) .lexique-item {
+            background: rgba(0, 0, 0, 0.02);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+        }
+        .lexique-item:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+        html:not(.dark) .lexique-item:hover {
+            background: rgba(0, 0, 0, 0.04);
+        }
+
+        /* Classes utilitaires pour les boutons de genre */
+        .btn-gender-inactive {
+            background-color: rgba(241, 245, 249, 1); /* slate-100 */
+            border-color: transparent;
+        }
+        .dark .btn-gender-inactive {
+            background-color: rgba(15, 23, 42, 1); /* slate-900 */
         }
     </style>
 </head>
@@ -88,44 +109,17 @@
                             <input type="number" id="total_debts" oninput="updateNet()" class="input-premium w-full p-3 rounded-xl font-bold border-red-500/20">
                         </div>
                     </div>
-                    <p class="mt-4 text-[10px] text-slate-500 italic">Note pour les convertis : Vous pouvez léguer jusqu'à 1/3 de vos biens à vos proches non-musulmans via un testament (Wasiyyah).</p>
-                </section>
-
-                <!-- Lexique -->
-                <section class="glass-card rounded-3xl p-6">
-                    <h2 class="text-xs font-black uppercase text-blue-500 mb-4 flex items-center gap-2">
-                        <i class="fa-solid fa-book-open"></i> Lexique & Règles Spécifiques
-                    </h2>
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
-                        <div class="lexique-item">
-                            <p class="text-[10px] font-bold text-emerald-500 uppercase">Germains</p>
-                            <p class="text-[11px] leading-tight text-slate-400">Même père ET même mère. Prioritaires.</p>
-                        </div>
-                        <div class="lexique-item">
-                            <p class="text-[10px] font-bold text-blue-500 uppercase">Consanguins</p>
-                            <p class="text-[11px] leading-tight text-slate-400">Même père, mères différentes.</p>
-                        </div>
-                        <div class="lexique-item">
-                            <p class="text-[10px] font-bold text-amber-500 uppercase">Grands-Mères</p>
-                            <p class="text-[11px] leading-tight text-slate-400">Si la mère est absente, les deux se partagent le 1/6 équitablement.</p>
-                        </div>
-                    </div>
                 </section>
 
                 <!-- Configuration Humaine -->
                 <section class="glass-card rounded-3xl p-6 space-y-6">
                     <div class="grid grid-cols-2 gap-4">
-                        <button onclick="setGender('male')" id="gm" class="p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/10 flex flex-col items-center">
+                        <button onclick="setGender('male')" id="gm" class="p-4 rounded-2xl border-2 border-blue-500 bg-blue-500/10 flex flex-col items-center transition-all">
                             <i class="fa-solid fa-mars text-blue-500 mb-1"></i><span class="text-[10px] font-bold">DÉFUNT HOMME</span>
                         </button>
-                        <button onclick="setGender('female')" id="gf" class="p-4 rounded-2xl border-2 border-transparent bg-slate-100 dark:bg-slate-900 flex flex-col items-center">
+                        <button onclick="setGender('female')" id="gf" class="p-4 rounded-2xl border-2 border-transparent btn-gender-inactive flex flex-col items-center transition-all">
                             <i class="fa-solid fa-venus text-pink-500 mb-1"></i><span class="text-[10px] font-bold">DÉFUNTE FEMME</span>
                         </button>
-                    </div>
-
-                    <div class="p-4 rounded-2xl bg-amber-500/5 border border-amber-500/20">
-                        <p class="text-[10px] font-bold text-amber-500 mb-2 uppercase"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Important</p>
-                        <p class="text-[11px] text-slate-400">Ne cochez/saisissez que les héritiers qui sont **Musulmans**. Les non-musulmans sont exclus du partage des parts fixes.</p>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
@@ -136,38 +130,71 @@
                         <div class="space-y-1">
                             <span class="text-[10px] text-slate-400">Enfants Musulmans</span>
                             <div class="flex gap-2">
-                                <input type="number" id="nb_sons" placeholder="Fils" class="input-premium w-1/2 p-2 rounded-xl text-center">
-                                <input type="number" id="nb_dau" placeholder="Filles" class="input-premium w-1/2 p-2 rounded-xl text-center">
+                                <input type="number" id="nb_sons" placeholder="Fils" class="input-premium w-1/2 p-2 rounded-xl text-center font-bold">
+                                <input type="number" id="nb_dau" placeholder="Filles" class="input-premium w-1/2 p-2 rounded-xl text-center font-bold">
                             </div>
                         </div>
                     </div>
 
                     <div class="grid grid-cols-2 gap-4">
                         <div class="p-4 rounded-2xl border border-white/5 bg-slate-500/5">
-                            <span class="text-[10px] font-bold text-amber-500 block mb-2 uppercase">Ascendants Musulmans</span>
+                            <span class="text-[10px] font-bold text-amber-500 block mb-2 uppercase">Ascendants</span>
                             <div class="space-y-2">
-                                <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="fth_alive" onchange="toggleGP()"> Père</label>
-                                <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="mth_alive" onchange="toggleGP()"> Mère</label>
-                                <div id="gp_section" class="pt-2 border-t border-white/5 space-y-2">
-                                    <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="gfp_alive"> G-Père Pat.</label>
-                                    <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="gmp_alive"> G-Mère Pat.</label>
-                                    <label class="flex items-center gap-2 text-xs"><input type="checkbox" id="gmm_alive"> G-Mère Mat.</label>
+                                <label class="flex items-center gap-2 text-xs cursor-pointer"><input type="checkbox" id="fth_alive"> Père</label>
+                                <label class="flex items-center gap-2 text-xs cursor-pointer"><input type="checkbox" id="mth_alive"> Mère</label>
+                                <div class="pt-2 border-t border-slate-500/20 space-y-2">
+                                    <label class="flex items-center gap-2 text-xs text-slate-400 cursor-pointer"><input type="checkbox" id="gfp_alive"> Gd-Père Pat.</label>
+                                    <label class="flex items-center gap-2 text-xs text-slate-400 cursor-pointer"><input type="checkbox" id="gmp_alive"> Gd-Mère Pat.</label>
+                                    <label class="flex items-center gap-2 text-xs text-slate-400 cursor-pointer"><input type="checkbox" id="gmm_alive"> Gd-Mère Mat.</label>
                                 </div>
                             </div>
                         </div>
                         <div class="p-4 rounded-2xl border border-white/5 bg-slate-500/5">
-                            <span class="text-[10px] font-bold text-blue-500 block mb-2 uppercase">Fratrie Musulmane</span>
+                            <span class="text-[10px] font-bold text-blue-500 block mb-2 uppercase">Fratrie</span>
                             <div class="space-y-2">
-                                <div class="flex gap-1"><input type="number" id="nb_fg" title="Frères Germains" placeholder="Fr. G" class="input-premium w-1/2 p-1 text-xs rounded text-center"><input type="number" id="nb_sg" title="Sœurs Germaines" placeholder="Sœ. G" class="input-premium w-1/2 p-1 text-xs rounded text-center"></div>
-                                <div class="flex gap-1"><input type="number" id="nb_fc" title="Frères Consanguins" placeholder="Fr. C" class="input-premium w-1/2 p-1 text-xs rounded text-center"><input type="number" id="nb_sc" title="Sœurs Consanguines" placeholder="Sœ. C" class="input-premium w-1/2 p-1 text-xs rounded text-center"></div>
+                                <div class="flex gap-1"><input type="number" id="nb_fg" placeholder="Fr. G" class="input-premium w-1/2 p-1 text-xs rounded text-center"><input type="number" id="nb_sg" placeholder="Sœ. G" class="input-premium w-1/2 p-1 text-xs rounded text-center"></div>
+                                <div class="flex gap-1"><input type="number" id="nb_fc" placeholder="Fr. C" class="input-premium w-1/2 p-1 text-xs rounded text-center"><input type="number" id="nb_sc" placeholder="Sœ. C" class="input-premium w-1/2 p-1 text-xs rounded text-center"></div>
                                 <input type="number" id="nb_ut" placeholder="Utérins (Total)" class="input-premium w-full p-1 text-xs rounded text-center">
                             </div>
                         </div>
                     </div>
                 </section>
 
+                <!-- Lexique -->
+                <section class="glass-card rounded-3xl p-6">
+                    <h2 class="text-xs font-black uppercase text-emerald-500 mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Lexique des Héritiers & Termes Juridiques
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="lexique-item">
+                            <h3 class="text-[10px] font-black text-emerald-400 uppercase mb-1">Frères/Sœurs Germains (شقائق)</h3>
+                            <p class="text-[11px] leading-relaxed text-slate-400">Ceux qui partagent le <strong>même père et la même mère</strong> avec le défunt. Ils sont prioritaires sur les consanguins.</p>
+                        </div>
+                        <div class="lexique-item">
+                            <h3 class="text-[10px] font-black text-blue-400 uppercase mb-1">Frères/Sœurs Consanguins (لأب)</h3>
+                            <p class="text-[11px] leading-relaxed text-slate-400">Ceux qui partagent le <strong>même père</strong> mais une mère différente. Ils n'héritent pas si un frère germain est présent.</p>
+                        </div>
+                        <div class="lexique-item">
+                            <h3 class="text-[10px] font-black text-amber-400 uppercase mb-1">Frères/Sœurs Utérins (لأم)</h3>
+                            <p class="text-[11px] leading-relaxed text-slate-400">Ceux qui partagent la <strong>même mère</strong> mais un père différent. Ils héritent d'une part fixe (1/6 ou 1/3) s'ils ne sont pas exclus.</p>
+                        </div>
+                        <div class="lexique-item">
+                            <h3 class="text-[10px] font-black text-purple-400 uppercase mb-1">Al-Asaba (العصبة)</h3>
+                            <p class="text-[11px] leading-relaxed text-slate-400">Ce sont les héritiers qui n'ont pas de part fixe mais qui récupèrent le <strong>reste (résidu)</strong> après distribution des parts imposées.</p>
+                        </div>
+                        <div class="lexique-item">
+                            <h3 class="text-[10px] font-black text-red-400 uppercase mb-1">Al-Awl (العول)</h3>
+                            <p class="text-[11px] leading-relaxed text-slate-400">C'est la réduction proportionnelle des parts quand la somme des héritiers à parts fixes dépasse 100% de la succession.</p>
+                        </div>
+                        <div class="lexique-item">
+                            <h3 class="text-[10px] font-black text-teal-400 uppercase mb-1">Al-Radd (الرد)</h3>
+                            <p class="text-[11px] leading-relaxed text-slate-400">Le contraire du Awl : redistribuer le surplus aux héritiers (sauf les conjoints) si personne ne peut prendre le résidu par Asaba.</p>
+                        </div>
+                    </div>
+                </section>
+
                 <button onclick="calculate()" class="w-full py-5 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-3xl shadow-xl transition-all">
-                    EXÉCUTER LE PARTAGE JURIDIQUE
+                    EXÉCUTER LE PARTAGE (FIQH SALAFI)
                 </button>
             </div>
 
@@ -175,27 +202,24 @@
             <div class="lg:col-span-5">
                 <div id="results-box" class="glass-card rounded-3xl p-6 sticky top-8 hidden">
                     <div class="flex justify-between items-center mb-6">
-                        <h2 class="text-xl font-black">Répartition</h2>
-                        <span id="badge-status" class="text-[8px] px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 font-bold uppercase tracking-widest">Normal</span>
+                        <h2 class="text-xl font-black">Répartition Finale</h2>
+                        <span id="badge-status" class="text-[8px] px-2 py-1 rounded bg-emerald-500/20 text-emerald-400 font-bold uppercase tracking-widest">Calculé</span>
                     </div>
                     
                     <div id="results-list" class="space-y-3 mb-6"></div>
 
                     <div class="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/20">
                         <div class="flex justify-between text-[10px] uppercase font-bold text-slate-500 mb-1">
-                            <span>Base de calcul (Net)</span>
+                            <span>Base Nette</span>
                             <span id="res-sum-part"></span>
                         </div>
                         <div id="res-total" class="text-3xl font-black text-emerald-500"></div>
-                        <p id="converti-msg" class="mt-4 p-3 bg-amber-500/10 border border-amber-500/20 rounded-xl text-[10px] text-amber-600 dark:text-amber-400 hidden">
-                            <strong>Note :</strong> Seuls les héritiers musulmans sont affichés.
-                        </p>
                     </div>
                 </div>
                 
                 <div id="placeholder" class="glass-card rounded-3xl p-12 text-center border-dashed border-white/10 h-full flex flex-col items-center justify-center">
                     <i class="fa-solid fa-scale-balanced text-4xl text-slate-700 mb-4"></i>
-                    <p class="text-slate-500 text-sm font-light">Saisissez uniquement les héritiers <span class="text-emerald-500 font-bold">musulmans</span> pour obtenir un calcul conforme au Fiqh.</p>
+                    <p class="text-slate-500 text-sm font-light">Le calcul respecte l'avis des savants contemporains (Ibn Bâz, Ibn 'Uthaymīn).</p>
                 </div>
             </div>
         </div>
@@ -214,21 +238,24 @@
             deceasedGender = g;
             const gm = document.getElementById('gm');
             const gf = document.getElementById('gf');
+            
             if(g === 'male') {
+                gm.classList.remove('btn-gender-inactive', 'border-transparent');
                 gm.classList.add('border-blue-500', 'bg-blue-500/10');
+                
                 gf.classList.remove('border-pink-500', 'bg-pink-500/10');
-                gf.classList.add('border-transparent');
+                gf.classList.add('btn-gender-inactive', 'border-transparent');
+                
                 document.getElementById('spouse_label').innerText = "Épouse(s) Musulmane(s)";
             } else {
+                gf.classList.remove('btn-gender-inactive', 'border-transparent');
                 gf.classList.add('border-pink-500', 'bg-pink-500/10');
+                
                 gm.classList.remove('border-blue-500', 'bg-blue-500/10');
-                gm.classList.add('border-transparent');
+                gm.classList.add('btn-gender-inactive', 'border-transparent');
+                
                 document.getElementById('spouse_label').innerText = "Époux Musulman";
             }
-        }
-
-        function toggleGP() {
-            // Logique de visibilité simplifiée
         }
 
         function updateNet() {
@@ -258,6 +285,7 @@
 
             let heirs = [];
             const hasDescMale = (sons > 0); 
+            const hasDescFem = (dau > 0);
             const hasDesc = (sons > 0 || dau > 0);
             const totalSiblings = (fg + sg + fc + sc + ut);
 
@@ -270,30 +298,27 @@
             // 2. Mère ou Grands-Mères
             if(mth) {
                 let p = (hasDesc || totalSiblings >= 2) ? 1/6 : 1/3;
-                // Cas 'Umariyyatayn'
                 if(!hasDesc && totalSiblings === 0 && fth) {
                     p = (1 - (heirs.find(h => h.id === 'spouse')?.part || 0)) / 3;
                 }
                 heirs.push({id: 'mother', name: "Mère", part: p, count: 1, type: 'f'});
             } else {
-                // Si pas de mère, les grands-mères peuvent hériter
-                let gmp_eligible = gmp && !fth; // Le père exclut la GM paternelle selon l'avis majoritaire
-                let gmm_eligible = gmm; // La GM maternelle n'est exclue que par la mère
-
+                let gmp_eligible = gmp && !fth && !mth; 
+                let gmm_eligible = gmm && !mth; 
                 if (gmp_eligible && gmm_eligible) {
-                    heirs.push({id: 'gm_share', name: "Grands-Mères (Paternelle & Maternelle)", part: 1/6, count: 2, type: 'f'});
+                    heirs.push({id: 'gm_share', name: "G-Mères (Pat. & Mat.)", part: 1/6, count: 2, type: 'f'});
                 } else if (gmp_eligible) {
-                    heirs.push({id: 'gmp', name: "Grand-Mère Paternelle", part: 1/6, count: 1, type: 'f'});
+                    heirs.push({id: 'gmp', name: "G-Mère Paternelle", part: 1/6, count: 1, type: 'f'});
                 } else if (gmm_eligible) {
-                    heirs.push({id: 'gmm', name: "Grand-Mère Maternelle", part: 1/6, count: 1, type: 'f'});
+                    heirs.push({id: 'gmm', name: "G-Mère Maternelle", part: 1/6, count: 1, type: 'f'});
                 }
             }
 
             // 3. Père ou Grand-Père
             if(fth) {
-                if(hasDesc) heirs.push({id: 'father_f', name: "Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
+                if(hasDesc) heirs.push({id: 'father_f', name: "Père (Fard)", part: 1/6, count: 1, type: 'f'});
             } else if(gfp && !hasDescMale) {
-                heirs.push({id: 'gfather_f', name: "Grand-Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
+                heirs.push({id: 'gfather_f', name: "G-Père (Fard)", part: 1/6, count: 1, type: 'f'});
             }
 
             // 4. Filles (si pas de fils)
@@ -301,16 +326,16 @@
                 heirs.push({id: 'daughters', name: "Fille(s)", part: (dau === 1 ? 1/2 : 2/3), count: dau, type: 'f'});
             }
 
-            // 5. Utérins
+            // 5. Utérins (Exclus par descendant ou ascendant mâle)
             if(ut > 0 && !hasDesc && !fth && !gfp) {
                 heirs.push({id: 'uterines', name: "Fratrie Utérine", part: (ut === 1 ? 1/6 : 1/3), count: ut, type: 'f'});
             }
 
-            // Calcul Al-Awl
+            // Gestion Al-Awl
             let sumF = heirs.reduce((acc, h) => acc + h.part, 0);
             if(sumF > 1.0001) {
                 heirs.forEach(h => h.part = h.part / sumF);
-                document.getElementById('badge-status').innerText = "Al-Awl (Réduction)";
+                document.getElementById('badge-status').innerText = "Al-Awl";
                 sumF = 1;
             }
 
@@ -328,35 +353,33 @@
                     heirs.push({id: 'father_a', name: "Père (Résidu)", part: residue, count: 1, type: 'a'});
                     hasAsaba = true;
                 } else if(gfp) {
-                    heirs.push({id: 'gfather_a', name: "Grand-Père (Résidu)", part: residue, count: 1, type: 'a'});
+                    heirs.push({id: 'gfather_a', name: "G-Père (Résidu)", part: residue, count: 1, type: 'a'});
                     hasAsaba = true;
-                } else if(fg > 0 || sg > 0) {
-                    const shares = (fg * 2) + sg;
-                    heirs.push({name: "Frère(s) Germ.", part: (residue/shares)*2*fg, count: fg, type: 'a'});
-                    if(sg > 0) heirs.push({name: "Sœur(s) Germ. (Asaba)", part: (residue/shares)*sg, count: sg, type: 'a'});
-                    hasAsaba = true;
-                } else if(fc > 0 || sc > 0) {
-                    const shares = (fc * 2) + sc;
-                    heirs.push({name: "Frère(s) Cons.", part: (residue/shares)*2*fc, count: fc, type: 'a'});
-                    if(sc > 0) heirs.push({name: "Sœur(s) Cons. (Asaba)", part: (residue/shares)*sc, count: sc, type: 'a'});
-                    hasAsaba = true;
+                } else if(!fth && !gfp) { // Selon l'avis que le GP exclut les frères
+                    if(fg > 0 || (sg > 0 && hasDescFem)) {
+                        const shares = (fg * 2) + sg;
+                        heirs.push({name: "Frère(s) Germ.", part: (residue/shares)*2*fg, count: fg, type: 'a'});
+                        if(sg > 0) heirs.push({name: "Sœur(s) Germ. (Asaba)", part: (residue/shares)*sg, count: sg, type: 'a'});
+                        hasAsaba = true;
+                    } else if(fc > 0 || (sc > 0 && hasDescFem)) {
+                        const shares = (fc * 2) + sc;
+                        heirs.push({name: "Frère(s) Cons.", part: (residue/shares)*2*fc, count: fc, type: 'a'});
+                        if(sc > 0) heirs.push({name: "Sœur(s) Cons. (Asaba)", part: (residue/shares)*sc, count: sc, type: 'a'});
+                        hasAsaba = true;
+                    }
                 }
             }
 
-            // Calcul Al-Radd
+            // Al-Radd
             let finalSum = heirs.reduce((acc, h) => acc + h.part, 0);
             if(finalSum < 0.9999 && !hasAsaba) {
                 let raddHeirs = heirs.filter(h => h.id !== 'spouse');
                 let raddSum = raddHeirs.reduce((acc, h) => acc + h.part, 0);
                 if(raddSum > 0) {
                     let toDistribute = 1 - (heirs.find(h => h.id === 'spouse')?.part || 0);
-                    raddHeirs.forEach(h => {
-                        h.part = (h.part / raddSum) * toDistribute;
-                    });
+                    raddHeirs.forEach(h => h.part = (h.part / raddSum) * toDistribute);
+                    document.getElementById('badge-status').innerText = "Al-Radd";
                 }
-                document.getElementById('badge-status').innerText = "Al-Radd (Retour)";
-            } else if(hasAsaba) {
-                document.getElementById('badge-status').innerText = "Al-Asaba (Résidu)";
             }
 
             render(heirs, net);
@@ -365,38 +388,31 @@
         function render(heirs, total) {
             document.getElementById('placeholder').classList.add('hidden');
             document.getElementById('results-box').classList.remove('hidden');
-            document.getElementById('converti-msg').classList.remove('hidden');
             const list = document.getElementById('results-list');
             list.innerHTML = "";
 
             let merged = {};
             heirs.forEach(h => {
                 let key = h.name.split(' (')[0];
-                if(!merged[key]) {
-                    merged[key] = {...h, name: key};
-                } else {
-                    merged[key].part += h.part;
-                }
+                if(!merged[key]) merged[key] = {...h, name: key};
+                else merged[key].part += h.part;
             });
 
             const sortedHeirs = Object.values(merged).filter(h => h.part > 0);
             
             if(sortedHeirs.length === 0) {
-                list.innerHTML = `<div class="p-8 text-center text-amber-500 glass-card rounded-2xl">
-                    <i class="fa-solid fa-circle-exclamation text-2xl mb-2"></i>
-                    <p class="text-xs uppercase font-bold tracking-tighter">Aucun héritier musulman détecté.</p>
-                </div>`;
+                list.innerHTML = `<p class="text-center text-xs text-amber-500">Aucun héritier éligible selon ces critères.</p>`;
             } else {
                 sortedHeirs.forEach(h => {
                     const el = document.createElement('div');
-                    el.className = "p-4 rounded-2xl bg-slate-500/5 border border-black/5 dark:border-white/5 flex justify-between items-center transition-all hover:bg-emerald-500/5";
+                    el.className = "p-3 rounded-xl bg-slate-500/5 border border-white/5 flex justify-between items-center";
                     el.innerHTML = `
                         <div>
-                            <p class="font-bold text-sm">${h.name} ${h.type === 'a' ? '⚡' : ''}</p>
-                            <p class="text-[9px] opacity-60 uppercase font-black">${(h.part * 100).toFixed(2)}%</p>
+                            <p class="font-bold text-xs">${h.name}</p>
+                            <p class="text-[8px] opacity-50 uppercase font-black">${(h.part * 100).toFixed(2)}%</p>
                         </div>
                         <div class="text-right">
-                            <p class="font-black text-emerald-500">${(h.part * total).toLocaleString('fr-FR')} €</p>
+                            <p class="font-black text-emerald-500 text-sm">${(h.part * total).toLocaleString('fr-FR')} €</p>
                         </div>
                     `;
                     list.appendChild(el);
@@ -404,7 +420,6 @@
             }
 
             document.getElementById('res-total').innerText = total.toLocaleString('fr-FR') + " €";
-            document.getElementById('res-sum-part').innerText = "Analyse Complétée";
         }
     </script>
 </body>
