@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="fr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Al-Mawārīth Expert - Premium Edition</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+        
+        :root {
+            --primary-gold: #d4af37;
+            --emerald-deep: #064e3b;
+        }
+
+        /* Mode Sombre (Défaut) */
+        .dark body { 
+            background-color: #020617;
+            background-image: radial-gradient(circle at 50% 0%, #064e3b33 0%, transparent 50%);
+            color: #f8fafc;
+        }
+        .dark .glass-card {
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .dark .input-premium {
+            background: rgba(2, 6, 23, 0.8);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Mode Clair */
+        html:not(.dark) body {
+            background-color: #f8fafc;
+            background-image: radial-gradient(circle at 50% 0%, #10b98115 0%, transparent 50%);
+            color: #0f172a;
+        }
+        html:not(.dark) .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 20px -5px rgba(0, 0, 0, 0.05);
+        }
+        html:not(.dark) .input-premium {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            color: #0f172a;
+        }
+        html:not(.dark) .btn-gender {
+            background: #f1f5f9;
+        }
+
+        body { font-family: 'Inter', sans-serif; transition: background-color 0.5s ease; }
+        .arabic { font-family: 'Amiri', serif; }
+
+        .glass-card {
+            backdrop-filter: blur(12px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .input-premium:focus {
+            border-color: #10b981;
+            box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+            outline: none;
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 1.5rem;
+            right: 1.5rem;
+            z-index: 100;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade { animation: fadeIn 0.5s ease forwards; }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Bouton Toggle Thème -->
+    <div class="theme-toggle">
+        <button onclick="toggleTheme()" class="p-3 rounded-2xl glass-card border border-emerald-500/20 text-emerald-500 hover:scale-110 active:scale-95 transition-all shadow-xl">
+            <i id="theme-icon" class="fa-solid fa-moon text-xl"></i>
+        </button>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 py-8 md:py-12">
+        <!-- Header -->
+        <header class="text-center mb-12 animate-fade">
+            <div class="inline-block px-4 py-1.5 mb-4 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-500 text-xs font-bold tracking-widest uppercase">
+                Système Al-Mawārīth Premium
+            </div>
+            <h1 class="text-4xl md:text-6xl font-black tracking-tight mb-4">
+                <span class="bg-clip-text text-transparent bg-gradient-to-r from-emerald-600 to-teal-400">Expertise</span>
+                <span class="arabic text-emerald-600 ml-2">المواريث</span>
+            </h1>
+            <p class="text-slate-500 dark:text-slate-400 max-w-2xl mx-auto text-sm md:text-lg font-light leading-relaxed">
+                Calcul précis selon les avis des savants du Comité Permanent (Lajnah Dâ-imah).
+            </p>
+        </header>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Colonne de Saisie -->
+            <div class="lg:col-span-8 space-y-8">
+                
+                <!-- Section Inventaire -->
+                <section class="glass-card rounded-3xl p-6 md:p-8 animate-fade">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-500/20 flex items-center justify-center border border-emerald-500/30">
+                            <i class="fa-solid fa-vault text-emerald-600"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">1. Inventaire des Biens</h2>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Valeur des actifs</label>
+                            <div class="relative">
+                                <input type="number" id="total_assets" oninput="updateNetTotal()" class="input-premium w-full p-4 rounded-2xl text-lg font-bold" placeholder="0.00">
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase text-red-500 tracking-widest">Valeur des dettes</label>
+                            <div class="relative">
+                                <input type="number" id="total_debts" oninput="updateNetTotal()" class="input-premium w-full p-4 rounded-2xl text-lg font-bold border-red-500/20 focus:border-red-500" placeholder="0.00">
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-black uppercase text-amber-500 tracking-widest">Valeur testament</label>
+                            <div class="relative">
+                                <input type="number" id="total_wasiyyah" oninput="updateNetTotal()" class="input-premium w-full p-4 rounded-2xl text-lg font-bold border-amber-500/20 focus:border-amber-500" placeholder="0.00">
+                                <span class="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 font-bold">€</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-8 p-6 rounded-2xl bg-emerald-500/5 border border-emerald-500/20 flex flex-col md:flex-row justify-between items-center gap-4">
+                        <div class="text-center md:text-left">
+                            <p class="text-xs font-bold text-emerald-600 uppercase tracking-tighter">Montant Net Successoral</p>
+                        </div>
+                        <div id="display_net_total" class="text-3xl font-black text-emerald-600 dark:text-white">0,00 €</div>
+                    </div>
+                </section>
+
+                <!-- Section Famille -->
+                <section class="glass-card rounded-3xl p-6 md:p-8 animate-fade">
+                    <div class="flex items-center gap-3 mb-8">
+                        <div class="w-10 h-10 rounded-xl bg-blue-500/20 flex items-center justify-center border border-blue-500/30">
+                            <i class="fa-solid fa-users text-blue-600"></i>
+                        </div>
+                        <h2 class="text-xl font-bold">2. Configuration Familiale</h2>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                        <div class="space-y-4">
+                            <label class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Sexe du défunt</label>
+                            <div class="grid grid-cols-2 gap-3">
+                                <button onclick="setDeceasedGender('male')" id="btn-male" class="btn-gender p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 border-2 border-transparent transition-all flex flex-col items-center gap-2">
+                                    <i class="fa-solid fa-mars text-2xl text-blue-500"></i>
+                                    <span class="text-[10px] font-black">HOMME</span>
+                                </button>
+                                <button onclick="setDeceasedGender('female')" id="btn-female" class="btn-gender p-4 rounded-2xl bg-slate-100 dark:bg-slate-900/50 border-2 border-transparent transition-all flex flex-col items-center gap-2">
+                                    <i class="fa-solid fa-venus text-2xl text-pink-500"></i>
+                                    <span class="text-[10px] font-black">FEMME</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <label id="label-spouse" class="text-[10px] font-black uppercase text-slate-500 tracking-widest">Épouse(s)</label>
+                            <input type="number" id="count_spouses" min="0" value="0" class="input-premium w-full p-4 rounded-2xl text-lg font-bold">
+                        </div>
+                    </div>
+
+                    <!-- Enfants & Parents -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5">
+                            <p class="text-[10px] font-bold text-emerald-500 uppercase mb-4 tracking-widest">Descendance</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <span class="text-[10px] text-slate-400">Fils</span>
+                                    <input type="number" id="count_sons" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold">
+                                </div>
+                                <div class="space-y-1">
+                                    <span class="text-[10px] text-slate-400">Filles</span>
+                                    <input type="number" id="count_daughters" value="0" class="input-premium w-full p-3 rounded-xl text-center font-bold">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5">
+                            <p class="text-[10px] font-bold text-amber-500 uppercase mb-4 tracking-widest">Ascendance</p>
+                            <div class="grid grid-cols-2 gap-4">
+                                <label class="flex items-center gap-3 p-3 glass-card rounded-xl cursor-pointer">
+                                    <input type="checkbox" id="father_alive" class="w-4 h-4 accent-emerald-500">
+                                    <span class="text-[10px] font-bold">Père</span>
+                                </label>
+                                <label class="flex items-center gap-3 p-3 glass-card rounded-xl cursor-pointer">
+                                    <input type="checkbox" id="mother_alive" class="w-4 h-4 accent-emerald-500">
+                                    <span class="text-[10px] font-bold">Mère</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fratrie Simplifiée -->
+                    <div class="p-5 rounded-2xl bg-slate-50 dark:bg-slate-900/30 border border-black/5 dark:border-white/5">
+                        <p class="text-[10px] font-bold text-blue-500 uppercase mb-4 tracking-widest">Fratrie Germaine</p>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="number" id="count_f_g" placeholder="Nb Frères" class="input-premium w-full p-3 rounded-xl text-sm text-center">
+                            <input type="number" id="count_s_g" placeholder="Nb Sœurs" class="input-premium w-full p-3 rounded-xl text-sm text-center">
+                        </div>
+                    </div>
+                </section>
+
+                <button onclick="calculate()" class="w-full py-6 bg-emerald-600 hover:bg-emerald-500 text-white font-black rounded-3xl shadow-xl transition-all transform hover:-translate-y-1 active:scale-95 text-xl">
+                    CALCULER LE PARTAGE
+                </button>
+            </div>
+
+            <!-- Colonne de Résultats -->
+            <div class="lg:col-span-4">
+                <div id="results-card" class="glass-card rounded-3xl p-6 md:p-8 sticky top-8 shadow-2xl border-emerald-500/20 hidden">
+                    <h2 class="text-2xl font-black mb-8 flex items-center gap-3">
+                        <i class="fa-solid fa-chart-pie text-emerald-500"></i> Bilan Net
+                    </h2>
+                    <div id="results-list" class="space-y-4 mb-8"></div>
+                    <div class="bg-emerald-500/10 p-5 rounded-2xl border border-emerald-500/20">
+                        <p class="text-[10px] text-slate-500 font-black uppercase mb-1">Total Distribué</p>
+                        <div id="res-total-money" class="text-3xl font-black text-emerald-600 dark:text-white">0,00 €</div>
+                    </div>
+                </div>
+
+                <div id="placeholder-results" class="glass-card rounded-3xl p-12 text-center border-dashed border-black/10 dark:border-white/10 flex flex-col items-center justify-center min-h-[400px]">
+                    <i class="fa-solid fa-calculator text-4xl text-slate-300 mb-4"></i>
+                    <p class="text-slate-400 text-sm italic">Les résultats s'afficheront ici après calcul.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gestion du Thème
+        function toggleTheme() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.className = "fa-solid fa-sun text-xl";
+            } else {
+                html.classList.add('dark');
+                icon.className = "fa-solid fa-moon text-xl";
+            }
+        }
+
+        let gender = 'male';
+
+        function updateNetTotal() {
+            const assets = parseFloat(document.getElementById('total_assets').value) || 0;
+            const debts = parseFloat(document.getElementById('total_debts').value) || 0;
+            const wasiyyah = parseFloat(document.getElementById('total_wasiyyah').value) || 0;
+            
+            const afterDebts = assets - debts;
+            const netTotal = Math.max(0, afterDebts - wasiyyah);
+            document.getElementById('display_net_total').innerText = netTotal.toLocaleString('fr-FR', {style: 'currency', currency: 'EUR'});
+            return netTotal;
+        }
+
+        function setDeceasedGender(g) {
+            gender = g;
+            const bm = document.getElementById('btn-male');
+            const bf = document.getElementById('btn-female');
+            const sl = document.getElementById('label-spouse');
+            
+            [bm, bf].forEach(b => b.style.borderColor = "transparent");
+            if (g === 'male') {
+                bm.style.borderColor = "#3b82f6";
+                sl.innerText = "Épouse(s) vivante(s)";
+            } else {
+                bf.style.borderColor = "#ec4899";
+                sl.innerText = "Époux vivant";
+            }
+        }
+        setDeceasedGender('male');
+
+        function calculate() {
+            const total = updateNetTotal();
+            if (total <= 0) return alert("Veuillez saisir un actif net.");
+
+            const sps = parseInt(document.getElementById('count_spouses').value) || 0;
+            const sons = parseInt(document.getElementById('count_sons').value) || 0;
+            const dau = parseInt(document.getElementById('count_daughters').value) || 0;
+            const fth = document.getElementById('father_alive').checked;
+            const mth = document.getElementById('mother_alive').checked;
+            const f_g = parseInt(document.getElementById('count_f_g').value) || 0;
+            const s_g = parseInt(document.getElementById('count_s_g').value) || 0;
+
+            let shares = [];
+            let r = 1.0; 
+
+            const hasDescendant = (sons > 0 || dau > 0);
+            const hasBrothers = (f_g + s_g >= 2);
+
+            // 1. Conjoint
+            if (sps > 0) {
+                let s = (gender === 'male') ? (hasDescendant ? 1/8 : 1/4) : (hasDescendant ? 1/4 : 1/2);
+                shares.push({name: gender==='male'?"Épouse(s)":"Époux", part: s, count: sps});
+                r -= s;
+            }
+
+            // 2. Parents
+            if (mth) {
+                let s = (hasDescendant || hasBrothers) ? 1/6 : 1/3;
+                shares.push({name: "Mère", part: s, count: 1});
+                r -= s;
+            }
+            if (fth) {
+                if (hasDescendant) {
+                    shares.push({name: "Père (Fixe)", part: 1/6, count: 1});
+                    r -= 1/6;
+                }
+            }
+
+            // 3. Filles seules
+            if (sons === 0 && dau > 0) {
+                let s = (dau === 1) ? 1/2 : 2/3;
+                shares.push({name: "Fille(s)", part: s, count: dau});
+                r -= s;
+            }
+
+            // 4. Asaba (Reste)
+            let residue = Math.max(0, r);
+            if (residue > 0) {
+                if (sons > 0) {
+                    const totalP = (sons * 2) + dau;
+                    shares.push({name: "Fils", part: (residue/totalP)*2*sons, count: sons, isAsaba: true});
+                    if (dau > 0) shares.push({name: "Fille(s)", part: (residue/totalP)*dau, count: dau, isAsaba: true});
+                } else if (fth) {
+                    shares.push({name: "Père (Résidu)", part: residue, count: 1, isAsaba: true});
+                } else if (f_g > 0) {
+                    const totalP = (f_g * 2) + s_g;
+                    shares.push({name: "Frère(s) Germ.", part: (residue/totalP)*2*f_g, count: f_g, isAsaba: true});
+                    if (s_g > 0) shares.push({name: "Sœur(s) Germ.", part: (residue/totalP)*s_g, count: s_g, isAsaba: true});
+                }
+            }
+
+            render(shares, total);
+        }
+
+        function render(shares, total) {
+            document.getElementById('placeholder-results').classList.add('hidden');
+            const card = document.getElementById('results-card');
+            const list = document.getElementById('results-list');
+            card.classList.remove('hidden');
+            list.innerHTML = "";
+
+            shares.filter(s => s.part > 0).forEach(s => {
+                const item = document.createElement('div');
+                item.className = "p-4 rounded-2xl bg-slate-500/5 border border-black/5 dark:border-white/5 flex justify-between items-center";
+                item.innerHTML = `
+                    <div>
+                        <p class="font-bold text-sm">${s.name} ${s.isAsaba ? '⭐' : ''}</p>
+                        <p class="text-[10px] opacity-50 uppercase font-black">${(s.part*100).toFixed(1)}%</p>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-black text-emerald-600 dark:text-emerald-400">${(s.part * total).toLocaleString('fr-FR')} €</p>
+                        <p class="text-[9px] opacity-50">${s.count > 1 ? (s.part*total/s.count).toLocaleString('fr-FR')+'€ / pers.' : 'Part unique'}</p>
+                    </div>
+                `;
+                list.appendChild(item);
+            });
+            document.getElementById('res-total-money').innerText = total.toLocaleString('fr-FR') + " €";
+        }
+    </script>
+</body>
+</html>
