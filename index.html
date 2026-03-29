@@ -41,9 +41,11 @@
 
         .theme-toggle { position: fixed; top: 1.5rem; right: 1.5rem; z-index: 100; }
         
-        .alert-converti {
-            background: rgba(245, 158, 11, 0.1);
-            border-left: 4px solid #f59e0b;
+        .lexique-item {
+            padding: 0.75rem;
+            border-radius: 1rem;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
     </style>
 </head>
@@ -87,6 +89,27 @@
                         </div>
                     </div>
                     <p class="mt-4 text-[10px] text-slate-500 italic">Note pour les convertis : Vous pouvez léguer jusqu'à 1/3 de vos biens à vos proches non-musulmans via un testament (Wasiyyah).</p>
+                </section>
+
+                <!-- Lexique (Nouveau) -->
+                <section class="glass-card rounded-3xl p-6">
+                    <h2 class="text-xs font-black uppercase text-blue-500 mb-4 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open"></i> Lexique de la Fratrie (Hachimi)
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="lexique-item">
+                            <p class="text-[10px] font-bold text-emerald-500 uppercase">Germains</p>
+                            <p class="text-[11px] leading-tight text-slate-400">Même père ET même mère. Prioritaires sur les autres.</p>
+                        </div>
+                        <div class="lexique-item">
+                            <p class="text-[10px] font-bold text-blue-500 uppercase">Consanguins</p>
+                            <p class="text-[11px] leading-tight text-slate-400">Même père, mères différentes. Héritent si pas de germains mâles.</p>
+                        </div>
+                        <div class="lexique-item">
+                            <p class="text-[10px] font-bold text-amber-500 uppercase">Utérins</p>
+                            <p class="text-[11px] leading-tight text-slate-400">Même mère, pères différents. Part fixe de 1/6 ou 1/3.</p>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Configuration Humaine -->
@@ -212,10 +235,6 @@
         function updateNet() {
             const a = parseFloat(document.getElementById('total_assets').value) || 0;
             const d = parseFloat(document.getElementById('total_debts').value) || 0;
-            // Vérification tiers pour convertis (conseil)
-            if (d > a/3) {
-                // On peut laisser l'utilisateur dépasser s'il s'agit de dettes, mais on alerte visuellement
-            }
             return Math.max(0, a - d);
         }
 
@@ -223,7 +242,6 @@
             const net = updateNet();
             if(net <= 0) return;
 
-            // Inputs
             const sons = parseInt(document.getElementById('nb_sons').value) || 0;
             const dau = parseInt(document.getElementById('nb_dau').value) || 0;
             const sps = parseInt(document.getElementById('nb_spouses').value) || 0;
@@ -238,20 +256,15 @@
             const ut = parseInt(document.getElementById('nb_ut').value) || 0;
 
             let heirs = [];
-            
-            // Flags de blocage
             const hasDescMale = (sons > 0); 
             const hasDesc = (sons > 0 || dau > 0);
             const totalSiblings = (fg + sg + fc + sc + ut);
 
-            // 1. PARTS FIXES (AS-HAB AL-FURUD)
-            // Époux / Épouse
             if(sps > 0) {
                 let p = (deceasedGender === 'male') ? (hasDesc ? 1/8 : 1/4) : (hasDesc ? 1/4 : 1/2);
                 heirs.push({id: 'spouse', name: deceasedGender === 'male' ? "Épouse(s)" : "Époux", part: p, count: sps, type: 'f'});
             }
 
-            // Mère
             if(mth) {
                 let p = (hasDesc || totalSiblings >= 2) ? 1/6 : 1/3;
                 if(!hasDesc && totalSiblings === 0 && fth) {
@@ -262,34 +275,28 @@
                 heirs.push({id: 'gmother', name: "Grand-Mère", part: 1/6, count: 1, type: 'f'});
             }
 
-            // Père (Fixe)
             if(fth) {
                 if(hasDesc) heirs.push({id: 'father_f', name: "Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
             } else if(gfh && !hasDescMale) {
                 heirs.push({id: 'gfather_f', name: "Grand-Père (Part fixe)", part: 1/6, count: 1, type: 'f'});
             }
 
-            // Filles (si pas de fils)
             if(sons === 0 && dau > 0) {
                 heirs.push({id: 'daughters', name: "Fille(s)", part: (dau === 1 ? 1/2 : 2/3), count: dau, type: 'f'});
             }
 
-            // Fratrie Utérine
             if(ut > 0 && !hasDesc && !fth && !gfh) {
                 heirs.push({id: 'uterines', name: "Fratrie Utérine", part: (ut === 1 ? 1/6 : 1/3), count: ut, type: 'f'});
             }
 
-            // 2. CALCUL SOMME POUR AWL
             let sumF = heirs.reduce((acc, h) => acc + h.part, 0);
 
-            // 3. GESTION DE L'AWL
             if(sumF > 1.0001) {
                 heirs.forEach(h => h.part = h.part / sumF);
                 document.getElementById('badge-status').innerText = "Al-Awl (Réduction)";
                 sumF = 1;
             }
 
-            // 4. LES ASABAS
             let residue = Math.max(0, 1 - sumF);
             let hasAsaba = false;
 
@@ -318,7 +325,6 @@
                 }
             }
 
-            // 5. GESTION DU RADD
             let finalSum = heirs.reduce((acc, h) => acc + h.part, 0);
             if(finalSum < 0.9999 && !hasAsaba) {
                 let raddHeirs = heirs.filter(h => h.id !== 'spouse');
@@ -360,7 +366,6 @@
                 list.innerHTML = `<div class="p-8 text-center text-amber-500 glass-card rounded-2xl">
                     <i class="fa-solid fa-circle-exclamation text-2xl mb-2"></i>
                     <p class="text-xs uppercase font-bold tracking-tighter">Aucun héritier musulman détecté.</p>
-                    <p class="text-[10px] text-slate-500 mt-2">En l'absence d'héritiers musulmans, les biens reviennent au Trésor Public (Bayt al-Māl) ou sont distribués selon les lois locales, après exécution du testament (tiers).</p>
                 </div>`;
             } else {
                 sortedHeirs.forEach(h => {
@@ -373,7 +378,6 @@
                         </div>
                         <div class="text-right">
                             <p class="font-black text-emerald-500">${(h.part * total).toLocaleString('fr-FR')} €</p>
-                            <p class="text-[8px] opacity-40">${h.count > 1 ? (h.part*total/h.count).toLocaleString('fr-FR')+' / pers.' : 'Part unique'}</p>
                         </div>
                     `;
                     list.appendChild(el);
