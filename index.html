@@ -71,6 +71,14 @@
 </head>
 <body class="min-h-screen">
 
+    <!-- Bandeau d'avertissement -->
+    <div class="bg-amber-500/10 border-b border-amber-500/20 py-3 px-4 text-center">
+        <p class="text-amber-500 text-xs md:text-sm font-medium flex items-center justify-center gap-2">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            Ce simulateur est fourni à titre purement indicatif. Avant toute répartition effective de l'héritage, il est impératif de soumettre votre dossier à un savant ou à une autorité religieuse compétente.
+        </p>
+    </div>
+
     <div class="theme-toggle">
         <button onclick="toggleTheme()" class="p-3 rounded-2xl glass-card border border-emerald-500/20 text-emerald-500 hover:scale-110 active:scale-95 transition-all">
             <i id="theme-icon" class="fa-solid fa-moon text-xl"></i>
@@ -165,7 +173,6 @@
                         <i class="fa-solid fa-book-open"></i> Lexique & Règles (Fiqh Al-Mawārīth)
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <!-- Règle de la différence de religion -->
                         <div class="lexique-item border-amber-500/30 bg-amber-500/5 md:col-span-2">
                             <h3 class="text-[10px] font-black text-amber-500 uppercase mb-1">Empêchement : Différence de religion (اختلاف الدين)</h3>
                             <p class="text-[11px] leading-relaxed text-slate-400 mb-2">
